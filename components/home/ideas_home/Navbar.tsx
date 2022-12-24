@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 
-import { debounce } from "../../ultilities/debounce.js";
+import { debounce } from "../../../ultilities/debounce.js";
 import { BiSun, BiMoon } from "react-icons/bi";
 
-const NavBar = (props: {
-  dark: boolean;
-  setDark: () => void;
-  links: string[];
-}): JSX.Element => {
+const inPageLinks: string[] = [
+  "Home",
+  "About",
+  "Skills",
+  "Projects",
+  "Experience",
+  "Hobby",
+];
+
+const NavBar = (props: { dark: boolean; setDark: () => void }): JSX.Element => {
   // list of links to other sections of the page
-  const links: JSX.Element[] = props.links.map((link: string, key: number) => {
+  const links: JSX.Element[] = inPageLinks.map((link: string, key: number) => {
     return (
       <a
         className="text-xs md:text-base lg:text-2xl hover:cursor-pointer hover:underline hover:underline-offset-4"
