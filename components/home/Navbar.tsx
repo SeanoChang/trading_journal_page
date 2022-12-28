@@ -49,7 +49,7 @@ const NavBar = (props: {
 
   return (
     <div
-      className={`flex flex-row items-center w-full h-16 z-10 sticky top-0 transition duration-150 bg-stone-200 dark:bg-stone-800 shadow-inherit ${
+      className={`flex flex-row items-center w-full h-16 z-20 sticky top-0 transition duration-150 bg-stone-200 dark:bg-stone-800 shadow-inherit ${
         !shadow ? "" : "shadow-lg"
       }`}
     >

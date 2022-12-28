@@ -16,7 +16,6 @@ type NewsSource = {
   paths: string[];
   remove: string[];
   selector: Selector;
-  listSize: number;
 };
 
 type News = {
@@ -38,7 +37,6 @@ const newsSources: NewsSource[] = [
       timeSelector:
         "div.articleMetaSection > div.timing-data > div > div:nth-child(2)",
     },
-    listSize: 5,
   },
   {
     name: "CyrptoSlate",
@@ -51,7 +49,6 @@ const newsSources: NewsSource[] = [
       timeSelector:
         "a > div.content > div > div > div.bottom > span:nth-child(1)",
     },
-    listSize: 10,
   },
   {
     name: "Cryptopolitan",
@@ -63,7 +60,6 @@ const newsSources: NewsSource[] = [
       titleSelector: "div > h3 > a",
       timeSelector: "div > span:nth-child(2)",
     },
-    listSize: 5,
   },
   {
     name: "NewsBTC",
@@ -75,7 +71,6 @@ const newsSources: NewsSource[] = [
       titleSelector: ":header > a",
       timeSelector: "div.jeg_meta_date > a",
     },
-    listSize: 10,
   },
 ];
 
@@ -101,9 +96,14 @@ function runMiddleware(
   });
 }
 
-const getSpecificPath = async (source: NewsSource, path: string) => {
+const getSpecificPath = async (
+  source: NewsSource,
+  path: string,
+  pieces: number
+) => {
   let url = `${source.url}${path}`;
   let newsLists: News[] = [];
+  let piecesOfNews = source.name === "CryptoSlate" ? pieces * 2 : pieces;
   try {
     let response = await axios.get(url, {
       headers: { "Accept-Encoding": "gzip,deflate,compress" },
@@ -116,7 +116,7 @@ const getSpecificPath = async (source: NewsSource, path: string) => {
     }
     // add title and link to news list
     $(`${source.selector.baseSelector}`).each((i, el) => {
-      if (i < source.listSize) {
+      if (i < piecesOfNews) {
         let title = $(el)
           .find(`${source.selector.titleSelector}`)
           .attr("title");
@@ -146,13 +146,13 @@ const getSpecificPath = async (source: NewsSource, path: string) => {
   return newsLists;
 };
 
-const getNews = async () => {
+const getNews = async (pieces: number) => {
   let newsLists: News[] = [];
   try {
     await Promise.all(
       newsSources.map(async (source) => {
         for (const path of source.paths) {
-          let news = await getSpecificPath(source, path);
+          let news = await getSpecificPath(source, path, pieces);
           newsLists = [...newsLists, ...news];
         }
       })
@@ -174,8 +174,14 @@ export default async function handler(
   // Run the middleware
   await runMiddleware(req, res, cors);
 
+  // get query params -> number of new to fetch
+  let pieces: number = 2;
+  if (req.query.pieces !== undefined) {
+    pieces = parseInt(req.query.pieces as string);
+  }
+
   // Rest of the API logic
-  let newsLists: News[] | null = await getNews();
+  let newsLists: News[] | null = await getNews(pieces);
 
   if (newsLists !== null) {
     res.status(200).json(newsLists);

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import NavBar from "../../../components/home/ideas_home/Navbar";
 import { useSession } from "next-auth/react";
-import Router from "next/router";
+import { useRouter } from "next/router";
+import Header from "../../../components/home/ideas_home/Header";
+import TradingPairs from "../../../components/home/ideas_home/TradingPairs";
+import LearningResources from "../../../components/home/ideas_home/LearningResources";
 
 /*
     Home page for trading ideas.
@@ -12,16 +15,25 @@ import Router from "next/router";
 */
 const TradingIdeasHome = (): JSX.Element => {
   const [darkMode, setDarkMode] = useState(false);
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      // The user is not authenticated, handle it here.
+      router.push("/");
+    },
+  });
 
   const handleDarkMode = () => {
     setDarkMode(!darkMode);
   };
 
-  if (!session) {
-    // if user is not logged in redirect to login page
-    Router.push("/");
-  }
+  useEffect(() => {
+    if (!session) {
+      router.push("/");
+    }
+    console.log(session);
+  }, [session]);
 
   return (
     <>
@@ -33,12 +45,12 @@ const TradingIdeasHome = (): JSX.Element => {
       <div>
         <NavBar dark={darkMode} setDark={handleDarkMode} />
         <main className="flex flex-col justify-center items-center text-stone-500 bg-stone-100 dark:text-stone-200 dark:bg-stone-800 min-h-screen">
-          <h1 className="text-4xl md:text-6xl lg:text-9xl font-bold">
-            Trading Ideas
-          </h1>
+          <Header />
+          <TradingPairs />
+          <LearningResources />
         </main>
         <footer className="flex flex-col justify-center items-center">
-          <span>Copyright SeanoChang</span>
+          <span>&#169; SeanoChang</span>
         </footer>
       </div>
     </>

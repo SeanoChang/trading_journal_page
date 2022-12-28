@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { debounce } from "../../../ultilities/debounce.js";
 import { BiSun, BiMoon } from "react-icons/bi";
+import { useSession, signOut } from "next-auth/react";
 
 const inPageLinks: string[] = [
   "Home",

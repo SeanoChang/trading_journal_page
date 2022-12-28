@@ -51,9 +51,15 @@ export async function getPrices(assets: string) {
         name: asset.name,
         symbol: asset.symbol,
         price:
-          asset.quote.USD.price > 1
-            ? asset.quote.USD.price.toFixed(2)
-            : asset.quote.USD.price.toFixed(6),
+          asset.quote.USD.price < 100
+            ? asset.quote.USD.price < 10
+              ? asset.quote.USD.price < 1
+                ? asset.quote.USD.price < 0.1
+                  ? asset.quote.USD.price.toFixed(6)
+                  : asset.quote.USD.price.toFixed(5)
+                : asset.quote.USD.price.toFixed(4)
+              : asset.quote.USD.price.toFixed(3)
+            : asset.quote.USD.price.toFixed(2),
         percent_change_1h: asset.quote.USD.percent_change_1h.toFixed(2),
         percent_change_24h: asset.quote.USD.percent_change_24h.toFixed(2),
         percent_change_7d: asset.quote.USD.percent_change_7d.toFixed(2),
@@ -80,6 +86,7 @@ export default async function handler(
   await runMiddleware(req, res, cors);
 
   const prices = await getPrices(assets);
+
   if (prices) {
     res.status(200).json(prices);
   } else {
