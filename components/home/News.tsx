@@ -1,8 +1,9 @@
 import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { HiOutlineNewspaper } from "react-icons/hi";
-import NewsImage from "../../public/blockchain_icon/blockchain_46.png";
 import Image from "next/image";
+import Link from "next/link";
+import NewsImage from "../../public/blockchain_icon/blockchain_46.png";
 import MoreNewsImage from "../../public/blockchain_icon/blockchain_36.png";
 
 type News = {
@@ -36,7 +37,9 @@ const NewsItem = (props: { news: News }) => {
         <div className="text-left">{props.news.source}</div>
       </span>
       <a href={props.news.link} className="basis-3/4 hover:underline mx-4 my-1">
-        <h1 className="text-sm sm:text-base xl:text-xl">{props.news.title}</h1>
+        <h1 className="font-serif text-sm sm:text-base xl:text-xl">
+          {props.news.title}
+        </h1>
       </a>
     </motion.div>
   );
@@ -75,7 +78,7 @@ const News = (props: { newsList: News[] }) => {
       </div>
       {props.newsList.length < 50 ? (
         <div className="h-20 text-base md:text-xl hover:text-[#f1f13c] flex flex-row justify-center items-center">
-          <a href="/news">Click me to see more!</a>
+          <Link href="/news">Click me to see more!</Link>
           <div className="h-[25px] w-[25px] md:h-[30px] md:w-[30px] xl:h-[35px] xl:w-[35px] m-1">
             <Image src={MoreNewsImage} alt="more" />
           </div>

@@ -8,10 +8,10 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import useDarkMode from "../home/useDarkMode";
 
 const linkIcons: JSX.Element[] = [
-  <BiHomeAlt className="text-2xl md:text-3xl lg:text-4xl" />,
-  <BiDollar className="text-2xl md:text-3xl lg:text-4xl" />,
-  <BiNews className="text-2xl md:text-3xl lg:text-4xl" />,
-  <HiOutlineLightBulb className="text-2xl md:text-3xl lg:text-4xl" />,
+  <BiHomeAlt className="text-2xl md:text-3xl lg:text-4xl" key={1} />,
+  <BiDollar className="text-2xl md:text-3xl lg:text-4xl" key={2} />,
+  <BiNews className="text-2xl md:text-3xl lg:text-4xl" key={3} />,
+  <HiOutlineLightBulb className="text-2xl md:text-3xl lg:text-4xl" key={4} />,
 ];
 
 const NavBar = (props: { links: string[] }): JSX.Element => {

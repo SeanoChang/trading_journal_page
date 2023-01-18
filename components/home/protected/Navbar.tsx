@@ -7,13 +7,7 @@ import { RxExit } from "react-icons/rx";
 import Image from "next/image";
 import useDarkMode from "../useDarkMode";
 
-const inPageLinks: string[] = [
-  "Home",
-  "About",
-  "Skills",
-  "Projects",
-  "Experience",
-];
+const inPageLinks: string[] = ["Home", "Rules", "Ideas", "Resources"];
 
 const NavBar = (): JSX.Element => {
   // darkmode state

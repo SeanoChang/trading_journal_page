@@ -13,7 +13,7 @@ const SourcesPage = (): JSX.Element => {
   return (
     <div className="min-h-screen w-full flex flex-col justify-center items-center">
       <div className="sticky w-full">
-        <a href="/">Back</a>
+        <Link href="/">Back</Link>
       </div>
       <h1>Sources Page</h1>
       <div>

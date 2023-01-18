@@ -2,15 +2,15 @@ import News from "../components/home/News";
 import fetch from "node-fetch";
 import { GetStaticProps } from "next";
 import { RxExit } from "react-icons/rx";
-import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 const NewsPage = (props: { news_info: News[] }): JSX.Element => {
   return (
     <div className="flex flex-col justify-center items-center w-full min-h-screen">
       <div className="h-[5em] flex flex-row justify-start items-center w-full">
-        <a href="/">
+        <Link href="/">
           <RxExit className="hover:cursor-pointer mx-8 text-xl" />
-        </a>
+        </Link>
       </div>
       <News newsList={props.news_info} />
     </div>

@@ -25,10 +25,10 @@ const Rules = (): JSX.Element => {
       className="flex flex-col justify-center items-center"
     >
       <h1 className="text-3xl md:text-5xl lg:text-7xl text-[#ea4c4c]">Rules</h1>
-      <h2 className="text-base md:text-xl lg:text-2xl transition duration-150 hover:text-[#ea4c4c] mt-4">
-        “Risk comes from not knowing what you're doing.”{" "}
+      <h2 className="font-serif text-base md:text-xl lg:text-2xl transition duration-150 hover:text-[#ea4c4c] mt-4">
+        “Risk comes from not knowing what you&rsquo;re doing.”{" "}
       </h2>
-      <h2 className="mb-4"> - Warren Buffett</h2>
+      <h2 className="font-serif mb-4"> - Warren Buffett</h2>
       <div className="grid sm:grid-cols-2" id="rules-grid">
         {rules.map((rule: string) => {
           return <Rule rule={rule} key={rule} />;

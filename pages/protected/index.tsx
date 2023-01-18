@@ -33,7 +33,7 @@ const ProtectedHome = (props: {
   return (
     <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
       <Head>
-        <title>Seano's Trading Page</title>
+        <title>Seano&rsquo;s Trading Page</title>
         <meta
           name="description"
           content="Website for crypto news, price, and trading ideas."

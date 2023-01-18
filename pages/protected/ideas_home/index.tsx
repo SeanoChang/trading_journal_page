@@ -35,7 +35,7 @@ const TradingIdeasHome = (props: { tradingPairs: string[] }): JSX.Element => {
   return (
     <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
       <Head>
-        <title>Seano's Trading Ideas</title>
+        <title>Seano&rsquo;s Trading Ideas</title>
         <meta name="description" content="Trading ideas for crypto." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>

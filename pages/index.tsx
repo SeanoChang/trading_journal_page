@@ -1,9 +1,7 @@
 import Head from "next/head";
 import NavBar from "../components/home/Navbar";
-import Router from "next/router"; // for redirecting to protected page
 import Button from "../components/general/Button";
-import { useSession, signIn } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import Prices from "../components/home/Prices";
 import News from "../components/home/News";
@@ -22,15 +20,9 @@ export default function Home(props: {
   if (!props.assets_info) {
     return <ErrorPage statusCode={404} />;
   }
-  const { data: session, status } = useSession();
 
   // nav links for the navbar
   const navLinks: string[] = ["Home", "Prices", "News", "Ideas"];
-
-  // if the user is logged in, redirect to the protected page
-  if (status === "authenticated") {
-    Router.push("/protected");
-  }
 
   return (
     <motion.div
@@ -40,7 +32,7 @@ export default function Home(props: {
     >
       <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
         <Head>
-          <title>Seano's Trading Page</title>
+          <title>Seano&rsquo;s Trading Page</title>
           <meta
             name="description"
             content="Website for crypto news and prices"

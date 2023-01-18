@@ -26,7 +26,7 @@ const Quote = (props: { rand: number }): JSX.Element => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className="flex flex-col justify-center items-center w-full mt-8 px-2 hover:cursor-pointer max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-6xl"
+      className="font-serif flex flex-col justify-center items-center w-full mt-8 px-2 hover:cursor-pointer max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-6xl"
       onClick={() => {
         handleChangeQuote();
       }}

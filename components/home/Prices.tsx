@@ -6,6 +6,7 @@ import {
 } from "framer-motion";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { TiArrowForwardOutline } from "react-icons/ti";
 import PriceImage from "../../public/blockchain_icon/blockchain_08.png";
 
@@ -192,12 +193,12 @@ const Prices = (props: { assets: Prices[] }): JSX.Element => {
               <Image src={PriceImage} alt="prices" />
             </div>
           </div>
-          <a
+          <Link
             className="hover:text-red-500 hover:cursor-pointer"
             href="/sources"
           >
             My Crypto Icons Sources
-          </a>
+          </Link>
         </div>
       </div>
       <AnimatePresence>
