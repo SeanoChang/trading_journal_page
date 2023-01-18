@@ -4,25 +4,18 @@ import Cors from "cors";
 import isValidUrl from "../../helpers/validUrl";
 import * as cheerio from "cheerio";
 
-type Selector = {
-  baseSelector: string;
-  titleSelector: string;
-  timeSelector: string;
-};
-
 type NewsSource = {
   name: string;
   url: string;
   paths: string[];
   remove: string[];
-  selector: Selector;
+  selector: string;
 };
 
 type News = {
   title: string;
   link: string;
   source: string;
-  time: string;
 };
 
 const newsSources: NewsSource[] = [
@@ -31,46 +24,29 @@ const newsSources: NewsSource[] = [
     url: "https://www.coindesk.com",
     paths: ["/tag/bitcoin/", "/tag/ethereum/", "/tag/altcoins/"],
     remove: [""],
-    selector: {
-      baseSelector: "div.article-card > div > div.articleTextSection",
-      titleSelector: "h6 > a.card-title",
-      timeSelector:
-        "div.articleMetaSection > div.timing-data > div > div:nth-child(2)",
-    },
+    selector:
+      "div.article-card > div > div.articleTextSection > h6 > a.card-title",
   },
   {
     name: "CyrptoSlate",
     url: "https://cryptoslate.com",
     paths: ["/top-news/"],
     remove: [""],
-    selector: {
-      baseSelector: "div.posts > div > article",
-      titleSelector: "a",
-      timeSelector:
-        "a > div.content > div > div > div.bottom > span:nth-child(1)",
-    },
+    selector: "div.posts > div > article > a",
   },
   {
     name: "Cryptopolitan",
     url: "https://cryptopolitan.com",
     paths: ["/news/", "/news/page/2/"],
     remove: [""],
-    selector: {
-      baseSelector: "div > article > div",
-      titleSelector: "div > h3 > a",
-      timeSelector: "div > span:nth-child(2)",
-    },
+    selector: "div > article > div > div > h3 > a",
   },
   {
     name: "NewsBTC",
     url: "https://www.newsbtc.com",
     paths: ["/news/"],
     remove: ["jeg_siderbar"],
-    selector: {
-      baseSelector: "article.jeg_post",
-      titleSelector: ":header > a",
-      timeSelector: "div.jeg_meta_date > a",
-    },
+    selector: "article.jeg_post :header > a",
   },
 ];
 
@@ -115,27 +91,22 @@ const getSpecificPath = async (
       });
     }
     // add title and link to news list
-    $(`${source.selector.baseSelector}`).each((i, el) => {
+    $(`${source.selector}`).each((i, el) => {
       if (i < piecesOfNews) {
-        let title = $(el)
-          .find(`${source.selector.titleSelector}`)
-          .attr("title");
+        let title = $(el).attr("title");
         if (title === undefined) {
-          title = $(el).find(`${source.selector.titleSelector}`).text();
+          title = $(el).text();
         }
         title = title!.replace(/^\s+|\s+$/g, "");
-        let link = $(el).find(`${source.selector.titleSelector}`).attr("href");
+        let link = $(el).attr("href");
         if (!isValidUrl(link!)) {
           link = `${source.url}${link}`;
         }
-        let time = $(el).find(`${source.selector.timeSelector}`).text();
-        time = time.replace(/^\s+|\s+$/g, "");
 
         newsLists.push({
           title: title,
           link: link!,
           source: source.name,
-          time: time,
         });
       }
     });

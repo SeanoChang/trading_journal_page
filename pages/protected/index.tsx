@@ -1,22 +1,21 @@
 import React from "react";
-import NavBar from "../../components/home/Navbar";
+import NavBar from "../../components/home/protected/Navbar";
 import Head from "next/head";
-import { signOut } from "next-auth/react";
-import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Prices from "../../components/home/Prices";
 import News from "../../components/home/News";
-// import News from "../../components/home/News";
-// import TradingIdeas from "../../components/home/TradingIdeas";
-import { GetServerSideProps } from "next";
+import Quote from "../../components/general/Quote";
+import { GetStaticProps } from "next";
 import { motion } from "framer-motion";
+import Typewriter from "typewriter-effect";
 
 const ProtectedHome = (props: {
   darkMode: boolean;
   handleDarkMode: () => void;
   assets_info: Prices[];
   news_info: News[];
+  user_name: string;
 }): JSX.Element => {
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -26,16 +25,13 @@ const ProtectedHome = (props: {
       router.push("/");
     },
   });
-  const [darkMode, setDarkMode] = useState(false);
+
+  const user = session?.user?.name;
 
   const navLinks = ["Home", "Prices", "News", "Trading Ideas"];
 
-  const handleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
   return (
-    <>
+    <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
       <Head>
         <title>Seano's Trading Page</title>
         <meta
@@ -44,55 +40,74 @@ const ProtectedHome = (props: {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div className={darkMode ? "dark" : ""}>
-        <NavBar dark={darkMode} setDark={handleDarkMode} links={navLinks} />
-        <main className="flex flex-col justify-center items-center text-stone-700 bg-stone-100 dark:text-stone-200 dark:bg-stone-800 min-h-screen">
-          <motion.div className="min-h-screen flex flex-col justify-center items-center">
-            <h1 className="text-5 md:text-7xl lg:text-8xl font-bold">
-              {session?.user?.name} &#128588;
-            </h1>
-            <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold">
-              Welcome to...
-            </h1>
-            <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold">
-              World of Trading
-            </h2>
-          </motion.div>
+      <div>
+        <NavBar />
+        <main className="flex flex-col justify-center items-center -translate-y-[64px]">
+          <div className="min-h-screen flex flex-col justify-center items-center">
+            {user && (
+              <>
+                <motion.div
+                  className="flex flex-col justify-center items-center"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 1 }}
+                >
+                  <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold">
+                    {user} &#128588;
+                  </h1>
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
+                    Welcome to...
+                  </h1>
+                  <div className="text-3xl md:text-5xl lg:text-6xl font-bold">
+                    <Typewriter
+                      onInit={(typewriter) => {
+                        typewriter
+                          .typeString("Seano's Trading Page")
+                          .pauseFor(2500)
+                          .deleteAll()
+                          .typeString("World of Trading!")
+                          .pauseFor(2500)
+                          .deleteChars(8)
+                          .typeString("Crypto!")
+                          .pauseFor(2500)
+                          .start();
+                      }}
+                      options={{
+                        loop: true,
+                        delay: 75,
+                        autoStart: true,
+                      }}
+                    />
+                  </div>
+                </motion.div>
+                <Quote rand={2} />
+              </>
+            )}
+          </div>
           <Prices assets={props.assets_info} />
           <News newsList={props.news_info} />
           <motion.div className="flex flex-col justify-center items-center h-[40vh]">
             <motion.button
               onClick={() => router.push("/protected/ideas_home")}
-              className="text-5xl text-slate-600 m-20 bg-slate-200 p-8 rounded-full"
-              whileHover={{ scale: 1.2 }}
+              className="text-md sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-slate-600 m-20 bg-slate-200 p-8 rounded-full"
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
             >
               See My Trading Ideas &#129488;
             </motion.button>
           </motion.div>
-          <motion.div className="min-h-screen flex flex-col justify-center ">
-            <button
-              onClick={() =>
-                signOut({
-                  callbackUrl: `${window.location.origin}/`,
-                })
-              }
-            >
-              Sign out
-            </button>
-          </motion.div>
         </main>
         <footer className="flex flex-col justify-center items-center">
           <span>&#169; SeanoChang</span>
         </footer>
       </div>
-    </>
+    </div>
   );
 };
 
 // server side rendering
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getStaticProps: GetStaticProps = async () => {
   const defaultAssets = [
     "btc",
     "eth",

@@ -27,7 +27,7 @@ export default function SignIn(providers: any) {
       return (
         <div
           key={provider.name}
-          className="flex flex-row justify-center items-center text-xl sm:text-2xl 2xl:text-3xl w-full p-2 sm:p-4 lg:p-6"
+          className="flex flex-row justify-center items-center text-lg sm:text-xl 2xl:text-2xl w-full py-4"
         >
           <button
             onClick={() =>
@@ -35,12 +35,12 @@ export default function SignIn(providers: any) {
                 callbackUrl: `${window.location.origin}/protected`,
               })
             }
-            className={`flex flex-row justify-center items-center rounded-xl w-5/6 hover:drop-shadow-xl transition duration-150 ${providerStyles[index].bgcolor} ${providerStyles[index].iconcolor}`}
+            className={`flex flex-row justify-evenly items-center rounded-2xl w-2/3 hover:shadow-slate-500/50 hover:shadow-lg transition duration-150 ${providerStyles[index].bgcolor} ${providerStyles[index].iconcolor}`}
           >
             <span className="p-1 sm:p-2 lg:p-4">
               {providerStyles[index].icon}
             </span>
-            <span className="py-1 pr-1 sm:py-2 sm:pr-2 lg:py-4 lg:pr-4">
+            <span className="py-1 pr-1 sm:py-2 sm:pr-2 lg:py-4 lg:pr-4 overflow-clip">
               {provider.name}
             </span>
           </button>
@@ -50,8 +50,8 @@ export default function SignIn(providers: any) {
   );
 
   return (
-    <div className="flex flex-row justify-center items-center h-screen w-screen bg-stone-900">
-      <div className="flex flex-col justify-center items-center text-center w-1/2 sm:w-1/3 2xl:w-1/5 h-1/6 sm:h-1/5 lg:h-[30%] rounded-xl bg-gray-200">
+    <div className="flex flex-row justify-center items-center h-screen w-screen bg-slate-900">
+      <div className="flex flex-col justify-center items-center text-center w-1/2 sm:w-1/3 2xl:w-1/5 rounded-lg bg-slate-200">
         {providerList}
       </div>
     </div>

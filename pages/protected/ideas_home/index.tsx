@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import NavBar from "../../../components/home/ideas_home/Navbar";
+import NavBar from "../../../components/home/protected/Navbar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Header from "../../../components/home/ideas_home/Header";
-import TradingPairs from "../../../components/home/ideas_home/TradingPairs";
-import LearningResources from "../../../components/home/ideas_home/LearningResources";
+import Header from "../../../components/home/protected/Header";
+import TradingPairs from "../../../components/home/protected/TradingPairs";
+import LearningResources from "../../../components/home/protected/LearningResources";
+import Rules from "../../../components/home/protected/Rules";
+import { GetStaticProps } from "next";
+import fs from "fs";
+import path from "path";
 
 /*
     Home page for trading ideas.
@@ -13,7 +17,7 @@ import LearningResources from "../../../components/home/ideas_home/LearningResou
     Each trading pair will have a link to the page for all 
     the ideas for that trading pair.
 */
-const TradingIdeasHome = (): JSX.Element => {
+const TradingIdeasHome = (props: { tradingPairs: string[] }): JSX.Element => {
   const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession({
@@ -28,33 +32,39 @@ const TradingIdeasHome = (): JSX.Element => {
     setDarkMode(!darkMode);
   };
 
-  useEffect(() => {
-    if (!session) {
-      router.push("/");
-    }
-    console.log(session);
-  }, [session]);
-
   return (
-    <>
+    <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
       <Head>
         <title>Seano's Trading Ideas</title>
         <meta name="description" content="Trading ideas for crypto." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div>
-        <NavBar dark={darkMode} setDark={handleDarkMode} />
-        <main className="flex flex-col justify-center items-center text-stone-500 bg-stone-100 dark:text-stone-200 dark:bg-stone-800 min-h-screen">
+        <NavBar />
+        <main className="flex flex-col justify-center items-center min-h-screen">
           <Header />
-          <TradingPairs />
+          <Rules />
+          <TradingPairs tradingPairs={props.tradingPairs} />
           <LearningResources />
         </main>
         <footer className="flex flex-col justify-center items-center">
           <span>&#169; SeanoChang</span>
         </footer>
       </div>
-    </>
+    </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  // get all the trading pairs from the local file system and pass them to the component
+  const postsDirectory = path.join(process.cwd(), "data", "journals_mdx");
+  const tradingPairs = fs.readdirSync(postsDirectory);
+
+  return {
+    props: {
+      tradingPairs,
+    },
+  };
 };
 
 export default TradingIdeasHome;
