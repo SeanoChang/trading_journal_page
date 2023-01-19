@@ -4,13 +4,12 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import fs from "fs";
 import path from "path";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import matter from "gray-matter";
 import remarkGfm from "remark-gfm";
 import dynamic from "next/dynamic";
 import { MDXProvider } from "@mdx-js/react";
-import { RiArrowLeftCircleLine } from "react-icons/ri";
+import NavBar from "../../../../components/home/protected/pair/Navbar";
 
 const components = {
   h1: (props: any) => (
@@ -89,22 +88,14 @@ const Post = (): JSX.Element => {
   );
 
   return (
-    <div className="flex flex-col min-h-screen w-full justify-center items-center bg-slate-800">
-      <div className="flex flex-row w-full sticky bg-slate-700 justify-start items-center">
-        <span className="text-slate-100 p-2 text-xl">
-          <a
-            href={`/protected/ideas_home/${pair}`}
-            className="flex flex-row items-center"
-          >
-            <RiArrowLeftCircleLine className="inline " />{" "}
-            <span className="pl-1">back</span>
-          </a>
-        </span>
-      </div>
-      <div className="p-8 w-5/6 md:w-2/3 text-slate-300">
-        <MDXProvider components={components}>
-          <Post />
-        </MDXProvider>
+    <div className="w-screen bg-slate-50 dark:bg-[#161624] min-h-screen text-slate-600 dark:text-slate-200">
+      <NavBar symbol={`${date}`} />
+      <div className="flex flex-col justify-center items-center">
+        <div className="p-8 w-5/6 md:w-2/3">
+          <MDXProvider components={components}>
+            <Post />
+          </MDXProvider>
+        </div>
       </div>
     </div>
   );
