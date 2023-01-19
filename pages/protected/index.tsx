@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../../components/home/protected/Navbar";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
@@ -7,15 +7,35 @@ import Prices from "../../components/home/Prices";
 import News from "../../components/home/News";
 import Quote from "../../components/general/Quote";
 import Footer from "../../components/general/Footer";
-import { GetStaticProps } from "next";
 import { motion } from "framer-motion";
 import Typewriter from "typewriter-effect";
+import Loading from "../../components/general/Loading";
+
+const defaultAssets = [
+  "btc",
+  "eth",
+  "xrp",
+  "ada",
+  "doge",
+  "ape",
+  "dot",
+  "atom",
+  "sol",
+  "aave",
+  "bnb",
+  "etc",
+  "chz",
+  "ens",
+  "sushi",
+  "near",
+];
+let queryAssets = defaultAssets.join(",");
+
+let newsPieces = 3;
 
 const ProtectedHome = (props: {
   darkMode: boolean;
   handleDarkMode: () => void;
-  assets_info: Prices[];
-  news_info: News[];
   user_name: string;
 }): JSX.Element => {
   const router = useRouter();
@@ -29,7 +49,41 @@ const ProtectedHome = (props: {
 
   const user = session?.user?.name;
 
-  const navLinks = ["Home", "Prices", "News", "Trading Ideas"];
+  // get data from the api
+  const [prices, setPrices] = useState<Prices[]>([]);
+  const [news, setNews] = useState<News[]>([]);
+  const [priceLoading, setPriceLoading] = useState(true);
+  const [newsLoading, setNewsLoading] = useState(true);
+
+  useEffect(() => {
+    // find the size of the screen, update width every refresh
+    const width = window.innerWidth;
+    if (width < 768) {
+      queryAssets = defaultAssets.slice(0, 5).join(",");
+      newsPieces = 1;
+    } else if (width < 1024) {
+      queryAssets = defaultAssets.slice(0, 8).join(",");
+      newsPieces = 2;
+    }
+
+    console.log(newsPieces, queryAssets);
+
+    setPriceLoading(true);
+    fetch(`/api/prices?assets=${queryAssets}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setPrices(data);
+        setPriceLoading(false);
+      });
+
+    setNewsLoading(true);
+    fetch(`/api/news?pieces=${newsPieces}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setNews(data);
+        setNewsLoading(false);
+      });
+  }, []);
 
   return (
     <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
@@ -85,8 +139,14 @@ const ProtectedHome = (props: {
               </>
             )}
           </div>
-          <Prices assets={props.assets_info} />
-          <News newsList={props.news_info} />
+          {
+            // if the prices are loading, show a loading screen
+            priceLoading ? <Loading /> : <Prices assets={prices} />
+          }
+          {
+            // if the news are loading, show a loading screen
+            newsLoading ? <Loading /> : <News newsList={news} />
+          }
           <motion.div className="flex flex-col justify-center items-center h-[40vh]">
             <motion.button
               onClick={() => router.push("/protected/ideas_home")}
@@ -103,46 +163,6 @@ const ProtectedHome = (props: {
       </div>
     </div>
   );
-};
-
-// server side rendering
-export const getStaticProps: GetStaticProps = async () => {
-  const defaultAssets = [
-    "btc",
-    "eth",
-    "xrp",
-    "doge",
-    "ape",
-    "dot",
-    "apt",
-    "atom",
-    "sol",
-    "aave",
-    "bnb",
-    "etc",
-    "ens",
-    "dydx",
-    "sushi",
-    "near",
-  ];
-  try {
-    let queryAssets = defaultAssets.join(",");
-    const res = await fetch(
-      `http://localhost:3000/api/prices?assets=${queryAssets}`
-    );
-    const assets_info = await res.json();
-    const res2 = await fetch("http://localhost:3000/api/news");
-    const news_info = await res2.json();
-    return {
-      props: {
-        assets_info,
-        news_info,
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    return { props: {} };
-  }
 };
 
 export default ProtectedHome;

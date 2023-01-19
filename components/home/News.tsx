@@ -73,7 +73,7 @@ const News = (props: { newsList: News[] }) => {
           <Image src={NewsImage} alt="prices" />
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {newsComponents}
       </div>
       {props.newsList.length < 50 ? (

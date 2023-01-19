@@ -8,19 +8,70 @@ import Prices from "../components/home/Prices";
 import News from "../components/home/News";
 import fetch from "node-fetch";
 import { GetStaticProps } from "next";
-import ErrorPage from "next/error";
+import Loading from "../components/general/Loading";
 import Quote from "../components/general/Quote";
 import Image from "next/image";
 import TradingImage from "../public/blockchain_icon/blockchain_44.png";
+import React, { useState, useEffect } from "react";
 
-export default function Home(props: {
-  assets_info: Prices[];
-  news_info: News[];
-  rand_quote: number;
-}) {
-  if (!props.assets_info) {
-    return <ErrorPage statusCode={404} />;
-  }
+const defaultAssets = [
+  "btc",
+  "eth",
+  "xrp",
+  "ada",
+  "doge",
+  "ape",
+  "dot",
+  "atom",
+  "sol",
+  "aave",
+  "bnb",
+  "etc",
+  "chz",
+  "ens",
+  "sushi",
+  "near",
+];
+let queryAssets = defaultAssets.join(",");
+
+let newsPieces = 3;
+
+export default function Home(props: { rand_quote: number }) {
+  // get data from the api
+  const [prices, setPrices] = useState<Prices[]>([]);
+  const [news, setNews] = useState<News[]>([]);
+  const [priceLoading, setPriceLoading] = useState(true);
+  const [newsLoading, setNewsLoading] = useState(true);
+
+  useEffect(() => {
+    // find the size of the screen, update width every refresh
+    const width = window.innerWidth;
+    if (width < 768) {
+      queryAssets = defaultAssets.slice(0, 5).join(",");
+      newsPieces = 1;
+    } else if (width < 1024) {
+      queryAssets = defaultAssets.slice(0, 8).join(",");
+      newsPieces = 2;
+    }
+
+    console.log(newsPieces, queryAssets);
+
+    setPriceLoading(true);
+    fetch(`/api/prices?assets=${queryAssets}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setPrices(data);
+        setPriceLoading(false);
+      });
+
+    setNewsLoading(true);
+    fetch(`/api/news?pieces=${newsPieces}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setNews(data);
+        setNewsLoading(false);
+      });
+  }, []);
 
   // nav links for the navbar
   const navLinks: string[] = ["Home", "Prices", "News", "Ideas"];
@@ -62,8 +113,14 @@ export default function Home(props: {
             </div>
             <Quote rand={props.rand_quote} />
           </motion.div>
-          <Prices assets={props.assets_info} />
-          <News newsList={props.news_info} />
+          {
+            // if the prices are loading, show a loading screen
+            priceLoading ? <Loading /> : <Prices assets={prices} />
+          }
+          {
+            // if the news are loading, show a loading screen
+            newsLoading ? <Loading /> : <News newsList={news} />
+          }
           <div
             className="flex flex-col justify-center items-center h-[50vh]"
             id="ideas"
@@ -79,48 +136,9 @@ export default function Home(props: {
 
 // static props for the home page
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // get the size of the media query to decide the size of the lists
-
-  const defaultAssets = [
-    "btc",
-    "eth",
-    "xrp",
-    "ada",
-    "doge",
-    "ape",
-    "dot",
-    "atom",
-    "sol",
-    "aave",
-    "bnb",
-    "etc",
-    "chz",
-    "ens",
-    "sushi",
-    "near",
-  ];
-  const piecesOfNews = 2; // number of news from each source, a total of 8 sources
-  try {
-    let queryAssets = defaultAssets.join(",");
-    const res1 = await fetch(
-      `http://localhost:3000/api/prices?assets=${queryAssets}`
-    );
-    const assets_info = await res1.json();
-    const res2 = await fetch(
-      `http://localhost:3000/api/news?pieces=${piecesOfNews}`
-    );
-    const news_info = await res2.json();
-
-    // size of the quote is 100
-    return {
-      props: {
-        assets_info,
-        news_info,
-        rand_quote: Math.floor(Math.random() * 100),
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    return { props: {} };
-  }
+  return {
+    props: {
+      rand_quote: Math.floor(Math.random() * 100),
+    },
+  };
 };
