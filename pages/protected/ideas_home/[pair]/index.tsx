@@ -4,7 +4,8 @@ import fs from "fs";
 import path from "path";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { RiArrowLeftCircleLine } from "react-icons/ri";
+import NavBar from "../../../../components/home/protected/pair/Navbar";
+import Footer from "../../../../components/general/Footer";
 
 const PairHome = (props: { pair: string; posts: string[] }): JSX.Element => {
   const router = useRouter();
@@ -21,10 +22,10 @@ const PairHome = (props: { pair: string; posts: string[] }): JSX.Element => {
     post = post.replace(".mdx", "");
 
     return (
-      <li key={post}>
+      <li key={post} className="text-slate-800 dark:text-slate-100">
         <a
           href={`/protected/ideas_home/${props.pair}/${post}`}
-          className="text-sm md:text-base lg:text-lg hover:underline text-slate-100"
+          className="text-sm md:text-base lg:text-lg hover:underline "
         >
           {post}
         </a>
@@ -32,29 +33,30 @@ const PairHome = (props: { pair: string; posts: string[] }): JSX.Element => {
     );
   });
 
-  return (
-    <>
-      <div className="flex flex-row w-full sticky bg-slate-700 justify-start items-center">
-        <span className="text-slate-100 p-2 text-xl">
-          <a
-            href={`/protected/ideas_home`}
-            className="flex flex-row items-center"
-          >
-            <RiArrowLeftCircleLine className="inline " />{" "}
-            <span className="pl-1">back</span>
-          </a>
-        </span>
+  if (postItems.length === 0) {
+    return (
+      <div className="w-screen bg-slate-50 dark:bg-[#161624] min-h-screen text-slate-600 dark:text-slate-200">
+        <NavBar symbol={props.pair} />
+        <div className="flex flex-col justify-center items-center text-center h-screen -translate-y-[64px]">
+          Planning on adding some ideas for {props.pair} soon!
+        </div>
+        <footer className="flex flex-col justify-center items-center">
+          <span>&#169; SeanoChang</span>
+        </footer>
       </div>
-      <div className="flex flex-col justify-center items-center w-full min-h-screen">
-        <h1 className="text-3xl md:text-5xl lg:text-7xl">
-          {props.pair.toUpperCase()} Home
-        </h1>
-        <ul className="bg-slate-400 p-4 drop-shadow-md hover:drop-shadow-lg m-4 rounded">
-          {" "}
+    );
+  }
+
+  return (
+    <div className="w-screen bg-slate-50 dark:bg-[#161624] min-h-screen text-slate-600 dark:text-slate-200">
+      <NavBar symbol={props.pair} />
+      <div className="flex flex-col justify-center items-center text-center h-screen -translate-y-[64px]">
+        <ul className="grid auto-cols-auto p-4 bg-slate-200 dark:bg-slate-500 m-4 rounded w-5/6 sm:w-3/4 md:w-2/3 lg:w-1/2">
           {postItems}
         </ul>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

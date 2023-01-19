@@ -1,5 +1,6 @@
 import Head from "next/head";
 import NavBar from "../components/home/Navbar";
+import Footer from "../components/general/Footer";
 import Button from "../components/general/Button";
 import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
@@ -70,9 +71,7 @@ export default function Home(props: {
             <Button onclick={signIn} text={"Sign in to see more..."} />
           </div>
         </main>
-        <footer className="flex flex-col justify-center items-center">
-          <span>&#169; SeanoChang</span>
-        </footer>
+        <Footer />
       </div>
     </motion.div>
   );

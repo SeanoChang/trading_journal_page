@@ -7,6 +7,7 @@ import Header from "../../../components/home/protected/Header";
 import TradingPairs from "../../../components/home/protected/TradingPairs";
 import LearningResources from "../../../components/home/protected/LearningResources";
 import Rules from "../../../components/home/protected/Rules";
+import Footer from "../../../components/general/Footer";
 import { GetStaticProps } from "next";
 import fs from "fs";
 import path from "path";
@@ -47,9 +48,7 @@ const TradingIdeasHome = (props: { tradingPairs: string[] }): JSX.Element => {
           <TradingPairs tradingPairs={props.tradingPairs} />
           <LearningResources />
         </main>
-        <footer className="flex flex-col justify-center items-center">
-          <span>&#169; SeanoChang</span>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

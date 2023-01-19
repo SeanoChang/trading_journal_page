@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Prices from "../../components/home/Prices";
 import News from "../../components/home/News";
 import Quote from "../../components/general/Quote";
+import Footer from "../../components/general/Footer";
 import { GetStaticProps } from "next";
 import { motion } from "framer-motion";
 import Typewriter from "typewriter-effect";
@@ -98,9 +99,7 @@ const ProtectedHome = (props: {
             </motion.button>
           </motion.div>
         </main>
-        <footer className="flex flex-col justify-center items-center">
-          <span>&#169; SeanoChang</span>
-        </footer>
+        <Footer />
       </div>
     </div>
   );
@@ -112,7 +111,6 @@ export const getStaticProps: GetStaticProps = async () => {
     "btc",
     "eth",
     "xrp",
-    "ada",
     "doge",
     "ape",
     "dot",
@@ -120,15 +118,10 @@ export const getStaticProps: GetStaticProps = async () => {
     "atom",
     "sol",
     "aave",
-    "avax",
     "bnb",
     "etc",
-    "chz",
     "ens",
     "dydx",
-    "eos",
-    "shib",
-    "lunc",
     "sushi",
     "near",
   ];
