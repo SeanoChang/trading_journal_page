@@ -9,7 +9,7 @@ const Button = (props: { onclick: any; text: string }): JSX.Element => {
   });
 
   const opacity = useTransform(scrollYProgress, [1, 0.8], [0, 1]);
-  const scale = useTransform(scrollYProgress, [1, 0.5], [0.5, 1.5]);
+  const scale = useTransform(scrollYProgress, [1, 0.8], [0.5, 1.2]);
 
   return (
     <motion.div
