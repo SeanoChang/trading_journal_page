@@ -18,16 +18,15 @@ const tradingBooks: book[] = [
     link: "https://www.amazon.com/Japanese-Candlestick-Charting-Techniques-Second/dp/0471352072",
     description:
       "The bible of candlestick charting. This book is a must read for any trader.",
-    progress: 30,
+    progress: 95,
   },
   {
     id: 2,
     title: "A Complete Guide to Volume Price Analysis",
     author: "Anna Coulling",
     link: "https://www.amazon.com/Complete-Guide-Volume-Price-Analysis/dp/0471352072",
-    description:
-      "The bible of candlestick charting. This book is a must read for any trader.",
-    progress: 20,
+    description: "How to use volume to get the best trades.",
+    progress: 30,
   },
   {
     id: 3,
@@ -35,8 +34,8 @@ const tradingBooks: book[] = [
     author: "John Murphy",
     link: "https://www.amazon.com/Technical-Analysis-Financial-Markets-Prentice/dp/0136126522",
     description:
-      "The bible of candlestick charting. This book is a must read for any trader.",
-    progress: 90,
+      "Includes all basic and intermediate technical analysis concepts, good for general learning.",
+    progress: 35,
   },
   {
     id: 4,
@@ -49,11 +48,11 @@ const tradingBooks: book[] = [
   {
     id: 5,
     title:
-      "Option, Volaity, and Pricing: Advanced Trading Strategies and Techniques, 2nd Edition",
+      "Option, Volatility, and Pricing: Advanced Trading Strategies and Techniques, 2nd Edition",
     author: "Sheldon Natenberg",
     link: "https://www.amazon.com/Options-Volatility-Pricing-Advanced-Strategies/dp/0133976890",
-    description: "Book for options trading.",
-    progress: 100,
+    description: "Discussion of volatility and pricing. Haven't read it yet.",
+    progress: 0,
   },
   {
     id: 6,
@@ -62,30 +61,30 @@ const tradingBooks: book[] = [
     author: "Scott Carney",
     link: "https://www.amazon.com/Harmonic-Trading-Generation-Strategies-Techniques/dp/047052805X",
     description: "Book for harmonic trading.",
-    progress: 90,
+    progress: 40,
   },
   {
     id: 7,
     title: "Market Liquidity",
     author: "Thierry Foucault, Macro Pagano, Ailsa Roell",
     link: "https://www.amazon.com/Market-Liquidity-Princeton-Studies-Financial/dp/069112295X",
-    description: "Book for liquidity.",
-    progress: 50,
+    description: "Book for liquidity and price discovery.",
+    progress: 0,
   },
   {
     id: 8,
     title: "The Inner Circle Trader 2022 Mentorship",
     author: "ICT",
     link: "https://www.amazon.com/Market-Liquidity-Princeton-Studies-Financial/dp/069112295X",
-    description: "Book for liquidity.",
-    progress: 100,
+    description: "Orderflow concepts",
+    progress: 20,
   },
   {
     id: 9,
     title: "The Inner Circle Trader 12 Months Mentorship",
     author: "ICT",
     link: "https://www.amazon.com/Market-Liquidity-Princeton-Studies-Financial/dp/069112295X",
-    description: "Book for liquidity.",
+    description: "Orderflow core concepts",
     progress: 1,
   },
 ];
