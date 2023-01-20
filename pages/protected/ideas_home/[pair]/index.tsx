@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import NavBar from "../../../../components/home/protected/pair/Navbar";
 import Footer from "../../../../components/general/Footer";
+import Head from "next/head";
 
 const PairHome = (props: { pair: string; posts: string[] }): JSX.Element => {
   const router = useRouter();
@@ -49,6 +50,15 @@ const PairHome = (props: { pair: string; posts: string[] }): JSX.Element => {
 
   return (
     <div className="w-screen bg-slate-50 dark:bg-[#161624] min-h-screen text-slate-600 dark:text-slate-200">
+      <Head>
+        <title>Seano&rsquo;s Trading Ideas</title>
+        <meta name="description" content="Trading ideas for crypto." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="google-site-verification"
+          content="Q2eq-3vOWJK4BGDPiQWbFgFna4xbWmXlKZnGuPTBCbo"
+        />
+      </Head>
       <NavBar symbol={props.pair} />
       <div className="flex flex-col justify-center items-center text-center h-screen -translate-y-[64px]">
         <ul className="grid auto-cols-auto p-4 bg-slate-200 dark:bg-slate-500 m-4 rounded w-5/6 sm:w-3/4 md:w-2/3 lg:w-1/2">

@@ -93,6 +93,10 @@ export default function Home(props: { rand_quote: number }) {
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
+          <meta
+            name="google-site-verification"
+            content="Q2eq-3vOWJK4BGDPiQWbFgFna4xbWmXlKZnGuPTBCbo"
+          />
         </Head>
         <NavBar links={navLinks} />
         <main className="-translate-y-[64px]">

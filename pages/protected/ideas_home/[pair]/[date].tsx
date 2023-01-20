@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm";
 import dynamic from "next/dynamic";
 import { MDXProvider } from "@mdx-js/react";
 import NavBar from "../../../../components/home/protected/pair/Navbar";
+import Head from "next/head";
 
 const components = {
   h1: (props: any) => (
@@ -89,6 +90,15 @@ const Post = (): JSX.Element => {
 
   return (
     <div className="w-screen bg-slate-50 dark:bg-[#161624] min-h-screen text-slate-600 dark:text-slate-200">
+      <Head>
+        <title>Seano&rsquo;s Trading Ideas</title>
+        <meta name="description" content="Trading ideas for crypto." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="google-site-verification"
+          content="Q2eq-3vOWJK4BGDPiQWbFgFna4xbWmXlKZnGuPTBCbo"
+        />
+      </Head>
       <NavBar symbol={`${date}`} />
       <div className="flex flex-col justify-center items-center">
         <div className="p-8 w-5/6 md:w-2/3">

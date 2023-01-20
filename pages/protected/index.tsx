@@ -94,6 +94,10 @@ const ProtectedHome = (props: {
           content="Website for crypto news, price, and trading ideas."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="google-site-verification"
+          content="Q2eq-3vOWJK4BGDPiQWbFgFna4xbWmXlKZnGuPTBCbo"
+        />
       </Head>
       <div>
         <NavBar />
