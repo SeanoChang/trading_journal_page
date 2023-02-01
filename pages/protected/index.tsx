@@ -66,8 +66,6 @@ const ProtectedHome = (props: {
       newsPieces = 2;
     }
 
-    console.log(newsPieces, queryAssets);
-
     setPriceLoading(true);
     fetch(`/api/prices?assets=${queryAssets}`)
       .then((response) => response.json())

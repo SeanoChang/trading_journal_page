@@ -3,6 +3,7 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
+  spring,
 } from "framer-motion";
 import React from "react";
 import Image from "next/image";
@@ -74,19 +75,11 @@ const PriceTag = (props: { price: Prices; image: any; length: number }) => {
     target: ref,
   });
 
-  let opacity;
-  let translateX;
-  let scale;
+  const translate = props.length > 10 ? -100 : 0;
 
-  if (props.length < 10) {
-    opacity = useTransform(scrollYProgress, [0.98, 1], [1, 0.5]);
-    translateX = useTransform(scrollYProgress, [0.98, 1], [0, 0]);
-    scale = useTransform(scrollYProgress, [0.98, 1], [1, 0.9]);
-  } else {
-    opacity = useTransform(scrollYProgress, [0.95, 1], [1, 0.5]);
-    translateX = useTransform(scrollYProgress, [0.95, 1], [0, -150]);
-    scale = useTransform(scrollYProgress, [0.95, 1], [1, 0.95]);
-  }
+  const opacity = useTransform(scrollYProgress, [0.98, 1], [1, 0.5]);
+  const translateX = useTransform(scrollYProgress, [0.98, 1], [0, translate]);
+  const scale = useTransform(scrollYProgress, [0.98, 1], [1, 0.98]);
 
   const price = props.price;
   return (
@@ -97,9 +90,9 @@ const PriceTag = (props: { price: Prices; image: any; length: number }) => {
         translateX,
         scale,
       }}
+      transition={{ type: "spring", stiffness: 100 }}
       animate={{}}
       className="p-1 flex flex-row justify-center items-center hover:bg-slate-200 dark:hover:bg-slate-500 rounded-md m-2 transition duration-100"
-      key={price.symbol}
     >
       <div className="rounded-full overflow-hidden scale-90 sm:scale-100 m-1 mr-2">
         <Image
@@ -170,13 +163,14 @@ const PriceTag = (props: { price: Prices; image: any; length: number }) => {
 
 const PriceItems = (props: { prices: Prices[] }) => {
   const prices = props.prices;
-  const length = props.prices.length;
 
   const pricesComponents = prices.map((price: Prices, i: number) => {
     // if image is not found, use local image
     let image = require(`../../public/icon/${price.symbol.toLowerCase()}.png`);
 
-    return <PriceTag price={price} image={image} key={i} length={length} />;
+    return (
+      <PriceTag price={price} image={image} length={prices.length} key={i} />
+    );
   });
 
   return <>{pricesComponents}</>;
