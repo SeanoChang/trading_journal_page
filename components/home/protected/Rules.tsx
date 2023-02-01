@@ -5,6 +5,10 @@ const rules: string[] = [
   "Set stop loss everytime",
   "Know where to exit before you enter",
   "Don't chase trades",
+  "No more than 3 trades per day",
+  "Zoom out before getting in",
+  "Less is more",
+  "Look for liquidity",
 ];
 
 const Rule = (props: { rule: string }): JSX.Element => {
