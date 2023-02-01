@@ -37,7 +37,7 @@ const TradingIdeas = (props: { tradingPairs: string[] }): JSX.Element => {
 
   return (
     <div className="flex flex-col justify-center items-center my-72">
-      <h1 className="text-5xl md:text-6xl lg:text-7xl p-4 m-4">
+      <h1 className="text-3xl md:text-5xl lg:text-7xl my-4">
         Thoughts and Ideas
       </h1>
       <div className="font-serif text-base md:text-xl lg:text-2xl p-2 mx-1 mt-2">

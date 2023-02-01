@@ -65,7 +65,7 @@ const marketCapToStr = (marketCap: number): string => {
   }
 };
 
-const PriceTag = (props: { price: Prices; image: any }) => {
+const PriceTag = (props: { price: Prices; image: any; length: number }) => {
   const ref = React.useRef(null);
 
   // const isInView = useInView(ref, { once: true });
@@ -74,9 +74,19 @@ const PriceTag = (props: { price: Prices; image: any }) => {
     target: ref,
   });
 
-  const opacity = useTransform(scrollYProgress, [0.95, 1], [1, 0.5]);
-  const translateX = useTransform(scrollYProgress, [0.95, 1], [0, -150]);
-  const scale = useTransform(scrollYProgress, [0.95, 1], [1, 0.95]);
+  let opacity;
+  let translateX;
+  let scale;
+
+  if (props.length < 10) {
+    opacity = useTransform(scrollYProgress, [0.98, 1], [1, 0.5]);
+    translateX = useTransform(scrollYProgress, [0.98, 1], [0, 0]);
+    scale = useTransform(scrollYProgress, [0.98, 1], [1, 0.9]);
+  } else {
+    opacity = useTransform(scrollYProgress, [0.95, 1], [1, 0.5]);
+    translateX = useTransform(scrollYProgress, [0.95, 1], [0, -150]);
+    scale = useTransform(scrollYProgress, [0.95, 1], [1, 0.95]);
+  }
 
   const price = props.price;
   return (
@@ -160,12 +170,13 @@ const PriceTag = (props: { price: Prices; image: any }) => {
 
 const PriceItems = (props: { prices: Prices[] }) => {
   const prices = props.prices;
+  const length = props.prices.length;
 
   const pricesComponents = prices.map((price: Prices, i: number) => {
     // if image is not found, use local image
     let image = require(`../../public/icon/${price.symbol.toLowerCase()}.png`);
 
-    return <PriceTag price={price} image={image} key={i} />;
+    return <PriceTag price={price} image={image} key={i} length={length} />;
   });
 
   return <>{pricesComponents}</>;

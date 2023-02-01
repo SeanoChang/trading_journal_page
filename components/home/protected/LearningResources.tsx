@@ -98,15 +98,15 @@ const BookItem = (props: { book: Book }): JSX.Element => {
   return (
     <div
       key={props.book.id}
-      className="flex flex-col justify-center items-center m-8 group"
+      className="flex flex-col justify-center items-center m-4 sm:m-8 group"
     >
       <div
-        className="flex flex-col p-4 justify-center items-center dark:text-[#d7e7f9] text-center w-11/12 lg:w-5/6"
+        className="flex flex-col p-1 sm:p-4 justify-center items-center dark:text-[#d7e7f9] text-center w-full lg:w-5/6"
         ref={ref}
       >
-        <h3 className="text-xl font-bold">{props.book.title}</h3>
-        <h4 className="text-lg font-bold">{props.book.author}</h4>
-        <p className="text-sm">{props.book.description}</p>
+        <h3 className="text-base sm:text-xl font-bold">{props.book.title}</h3>
+        <h4 className="text-sm sm:text-lg font-bold">{props.book.author}</h4>
+        <p className="text-xs sm:text-sm">{props.book.description}</p>
         <div className="bg-gray-300 w-3/4 md:w-1/2 rounded my-4">
           <div
             style={{

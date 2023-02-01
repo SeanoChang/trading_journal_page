@@ -12,15 +12,25 @@ type News = {
   source: string;
 };
 
-const NewsItem = (props: { news: News }) => {
+const NewsItem = (props: { news: News; length: number }) => {
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
   });
 
-  const opacity = useTransform(scrollYProgress, [0.95, 1], [1, 0.5]);
-  const translateY = useTransform(scrollYProgress, [0.95, 1], [0, 50]);
-  const scale = useTransform(scrollYProgress, [0.95, 1], [1, 0.9]);
+  let opacity;
+  let translateY;
+  let scale;
+
+  if (props.length < 10) {
+    opacity = useTransform(scrollYProgress, [0.98, 1], [1, 0.5]);
+    translateY = useTransform(scrollYProgress, [0.98, 1], [0, 0]);
+    scale = useTransform(scrollYProgress, [0.98, 1], [1, 0.9]);
+  } else {
+    opacity = useTransform(scrollYProgress, [0.95, 1], [1, 0.5]);
+    translateY = useTransform(scrollYProgress, [0.95, 1], [0, 550]);
+    scale = useTransform(scrollYProgress, [0.95, 1], [1, 0.95]);
+  }
 
   return (
     <motion.div
@@ -47,7 +57,7 @@ const NewsItem = (props: { news: News }) => {
 
 const News = (props: { newsList: News[] }) => {
   const newsComponents = props.newsList.map((news: News, idx: number) => {
-    return <NewsItem news={news} key={idx} />;
+    return <NewsItem news={news} key={idx} length={props.newsList.length} />;
   });
 
   if (props.newsList.length === 0) {

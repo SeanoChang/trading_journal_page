@@ -47,10 +47,10 @@ export default function Home(props: { rand_quote: number }) {
     // find the size of the screen, update width every refresh
     const width = window.innerWidth;
     if (width < 768) {
-      queryAssets = defaultAssets.slice(0, 5).join(",");
+      queryAssets = defaultAssets.slice(0, 8).join(",");
       newsPieces = 1;
     } else if (width < 1024) {
-      queryAssets = defaultAssets.slice(0, 8).join(",");
+      queryAssets = defaultAssets.slice(0, 15).join(",");
       newsPieces = 2;
     }
 

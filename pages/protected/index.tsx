@@ -59,10 +59,10 @@ const ProtectedHome = (props: {
     // find the size of the screen, update width every refresh
     const width = window.innerWidth;
     if (width < 768) {
-      queryAssets = defaultAssets.slice(0, 5).join(",");
+      queryAssets = defaultAssets.slice(0, 8).join(",");
       newsPieces = 1;
     } else if (width < 1024) {
-      queryAssets = defaultAssets.slice(0, 8).join(",");
+      queryAssets = defaultAssets.slice(0, 15).join(",");
       newsPieces = 2;
     }
 
@@ -154,7 +154,7 @@ const ProtectedHome = (props: {
           <motion.div className="flex flex-col justify-center items-center h-[40vh]">
             <motion.button
               onClick={() => router.push("/protected/ideas_home")}
-              className="text-md sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-slate-600 m-20 bg-slate-200 p-8 rounded-full"
+              className="text-sm sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-slate-600 m-20 bg-slate-200 p-8 rounded-full"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
