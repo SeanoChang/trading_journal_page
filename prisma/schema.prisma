@@ -67,4 +67,16 @@ model Comment {
   title     String
   content   String
   createdAt DateTime @default(now())
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  pairId    String
+  title     String
+  content   String
+  authorId  String
+  createdAt DateTime @default(now())
+  comments  Comment[] 
 }

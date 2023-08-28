@@ -92,7 +92,7 @@ const PriceTag = (props: { price: Prices; image: any; length: number }) => {
       }}
       transition={{ type: "spring", stiffness: 100 }}
       animate={{}}
-      className="p-1 flex flex-row justify-center items-center hover:bg-slate-200 dark:hover:bg-slate-500 rounded-md m-2 transition duration-100"
+      className="p-1 flex flex-row justify-around sm:justify-center items-center hover:bg-slate-200 dark:hover:bg-slate-500 rounded-md m-2 transition duration-100 w-10/12 sm:w-3/5 lg:w-1/2"
     >
       <div className="rounded-full overflow-hidden scale-90 sm:scale-100 m-1 mr-2">
         <Image

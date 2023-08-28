@@ -35,13 +35,6 @@ const newsSources: NewsSource[] = [
     selector: "div.posts > div > article > a",
   },
   {
-    name: "Cryptopolitan",
-    url: "https://cryptopolitan.com",
-    paths: ["/news/", "/news/page/2/"],
-    remove: [""],
-    selector: "div > article > div > div > h3 > a",
-  },
-  {
     name: "NewsBTC",
     url: "https://www.newsbtc.com",
     paths: ["/news/"],
