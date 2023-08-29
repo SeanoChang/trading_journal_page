@@ -58,7 +58,7 @@ The application utilizes NextAuth.js for user authentication. Users can sign up 
 
 ![Trading Ideas](./public/screenshots/trading_journal.gif)
 
-Users can create, edit, and track their trading ideas, insights, and observations in the journal.
+Logged in users can view my trading ideas, insights, and observations in the journal.
 
 ### Real-Time Price Tracking
 
