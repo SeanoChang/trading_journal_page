@@ -2,6 +2,8 @@
 
 Welcome to the Trading Journal Page project! This full-stack application is designed to share me tracking my trading journey, record insights, and share my progress with close friends. The project utilizes a combination of technologies to create a comprehensive platform for sharing my trading experiences.
 
+Click here to see [live](https://trading-journal-page-3q7d.vercel.app/)
+
 ## Features
 
 - **Personal Trading Journal**: The application allows me to maintain a trading journal where I can document and share my trading activities, insights, and observations.
