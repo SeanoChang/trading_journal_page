@@ -1,34 +1,112 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Trading Journal Page
+
+Welcome to the Trading Journal Page project! This full-stack application is designed to share me tracking my trading journey, record insights, and share my progress with close friends. The project utilizes a combination of technologies to create a comprehensive platform for sharing my trading experiences.
+
+## Features
+
+- **Personal Trading Journal**: The application allows me to maintain a trading journal where I can document and share my trading activities, insights, and observations.
+
+- **User Authentication**: NextAuth.js is integrated to provide user authentication, allowing secure access to the journal using Discord, Github, and Google login for accessing my ideas.
+
+- **Animated User Interface**: Framer Motion is used to add smooth animations and transitions to the user interface, enhancing the user experience.
+
+- **Database Integration**: The backend integrates with Supabase, which uses PostgreSQL as the underlying database. Prisma is used to facilitate database operations and interactions.
+
+- **API Integration**: The application fetches cryptocurrency prices from Coin Market Cap and aggregates news from NewsBTC, Cryptoslate, and CoinDesk using a small scraping program.
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the Repository**: Start by cloning this repository to your local machine:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+   ```bash
+   git clone https://github.com/SeanoChang/trading_journal_page.git
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Navigate to the Project Directory**: Move into the project directory:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   cd trading_journal_page
+   ```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. **Install Dependencies**: Install the required dependencies using npm:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+4. **Configure Environment Variables**: Create `.env` files based on the provided examples or guidelines from the respective frameworks.
 
-To learn more about Next.js, take a look at the following resources:
+5. **Run the Application**: Start the server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+6. **Access the Application**: Open your browser and navigate to `http://localhost:3000` to explore and use the trading journal application.
 
-## Deploy on Vercel
+## Showcase
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Here are some key features of the Trading Journal Page application:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### User Registration and Authentication
+
+![User Registration](/screenshots/registration.png)
+
+The application utilizes NextAuth.js for user authentication. Users can sign up and log in to securely access their trading journal.
+
+### Track Trading Ideas
+
+![Trading Ideas](/screenshots/trading_ideas.png)
+
+Users can create, edit, and track their trading ideas, insights, and observations in the journal.
+
+### Real-Time Price Tracking
+
+![Real-Time Price](/screenshots/real_time_price.png)
+
+The application provides real-time cryptocurrency prices fetched from Coin Market Cap to help users stay updated with the latest market data.
+
+### News Aggregation
+
+![News Aggregation](/screenshots/news_aggregation.png)
+
+Stay informed about the latest developments in the cryptocurrency world through news aggregation from NewsBTC, Cryptoslate, and CoinDesk.
+
+### Smooth Animations with Framer Motion
+
+![Framer Motion Animations](/screenshots/animations.gif)
+
+The user interface is enhanced with Framer Motion animations, including children delay render, click effects, and in-view transitions.
+
+### Light and Dark Mode
+
+![Light and Dark Mode](/screenshots/light_dark_mode.png)
+
+Users can switch between light and dark modes to customize their viewing experience.
+
+### Responsive Design
+
+![Responsive Design](/screenshots/responsive_design.png)
+
+The application is designed to work seamlessly on various devices, ensuring a consistent user experience.
+
+### Typewriter Effect
+
+![Typewriter Effect](/screenshots/typewriter_effect.gif)
+
+Engage users with the typewriter effect, adding a dynamic touch to text content.
+
+
+## Usage
+
+1. **User Registration**: Sign up using NextAuth.js to create an account and gain access to the trading journal.
+
+2. **Create Journal Entries**: Use the journal interface to document your trading activities, insights, and observations.
+
+3. **Fetch Prices and News**: The application automatically fetches cryptocurrency prices from Coin Market Cap and aggregates news from various sources.
+
+4. **Share Insights**: Share your trading insights with your close friends by using the features provided by the application.
+
+## Contributions
+
+Contributions to this project are welcome! If you have ideas for improvements, additional features, or suggestions for enhancing the user experience, feel free to submit a pull request or open an issue.
