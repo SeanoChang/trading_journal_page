@@ -92,7 +92,7 @@ Users can switch between light and dark modes to customize their viewing experie
 
 ### Responsive Design
 
-![Responsive Design](./public/screenshots/responsive.gif)
+![Responsive Design](./public/screenshots/Responsive.gif)
 
 The application is designed to work seamlessly on various devices, ensuring a consistent user experience.
 
