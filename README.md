@@ -50,52 +50,55 @@ Here are some key features of the Trading Journal Page application:
 
 ### User Registration and Authentication
 
-![User Registration](/screenshots/registration.png)
+![User Registration](./public/screenshots/Sign_in.gif)
 
 The application utilizes NextAuth.js for user authentication. Users can sign up and log in to securely access their trading journal.
 
 ### Track Trading Ideas
 
-![Trading Ideas](/screenshots/trading_ideas.png)
+![Trading Ideas](./public/screenshots/trading_journal.gif)
 
 Users can create, edit, and track their trading ideas, insights, and observations in the journal.
 
 ### Real-Time Price Tracking
 
-![Real-Time Price](/screenshots/real_time_price.png)
+![Real-Time Price](./public/screenshots/Prices.png)
 
 The application provides real-time cryptocurrency prices fetched from Coin Market Cap to help users stay updated with the latest market data.
 
 ### News Aggregation
 
-![News Aggregation](/screenshots/news_aggregation.png)
+![News Aggregation](./public/screenshots/News.png)
 
 Stay informed about the latest developments in the cryptocurrency world through news aggregation from NewsBTC, Cryptoslate, and CoinDesk.
 
 ### Smooth Animations with Framer Motion
 
-![Framer Motion Animations](/screenshots/animations.gif)
+![Framer Motion Animations](./public/screenshots/Smooth_animation.gif)
 
 The user interface is enhanced with Framer Motion animations, including children delay render, click effects, and in-view transitions.
 
+![Children Delayed Render](./public/screenshots/Children_rendering.gif)
+
+The lists of price and news are touched with children delayed rendering.
+
 ### Light and Dark Mode
 
-![Light and Dark Mode](/screenshots/light_dark_mode.png)
+![Light and Dark Mode](./public/screenshots/light_dark_mode.gif)
 
 Users can switch between light and dark modes to customize their viewing experience.
 
 ### Responsive Design
 
-![Responsive Design](/screenshots/responsive_design.png)
+![Responsive Design](./public/screenshots/responsive.gif)
 
 The application is designed to work seamlessly on various devices, ensuring a consistent user experience.
 
 ### Typewriter Effect
 
-![Typewriter Effect](/screenshots/typewriter_effect.gif)
+![Typewriter Effect](./public/screenshots/Typewriter.gif)
 
 Engage users with the typewriter effect, adding a dynamic touch to text content.
-
 
 ## Usage
 
