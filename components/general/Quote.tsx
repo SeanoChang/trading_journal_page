@@ -7,7 +7,8 @@ type Quote = {
 };
 
 const Quote = (props: { rand: number }): JSX.Element => {
-  const [quote, setQuote] = useState<Quote>(quotes[props.rand]);
+  const initialIndex = props.rand % quotes.length;
+  const [quote, setQuote] = useState<Quote>(quotes[initialIndex]);
   const [rand, setRand] = useState<number>(props.rand);
 
   const handleChangeQuote = () => {

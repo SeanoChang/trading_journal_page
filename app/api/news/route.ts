@@ -1,8 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
-import Cors from "cors";
-import isValidUrl from "../../helpers/validUrl";
 import * as cheerio from "cheerio";
+import isValidUrl from "../../../helpers/validUrl";
 
 type NewsSource = {
   name: string;
@@ -43,28 +42,6 @@ const newsSources: NewsSource[] = [
   },
 ];
 
-// Initializing the cors middleware
-const cors = Cors({
-  methods: ["GET", "HEAD"],
-});
-
-// Helper method to wait for a middleware to execute before continuing
-function runMiddleware(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  fn: Function
-) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-
-      return resolve(result);
-    });
-  });
-}
-
 const getSpecificPath = async (
   source: NewsSource,
   path: string,
@@ -83,7 +60,6 @@ const getSpecificPath = async (
         $(remove).remove();
       });
     }
-    // add title and link to news list
     $(`${source.selector}`).each((i, el) => {
       if (i < piecesOfNews) {
         let title = $(el).attr("title");
@@ -97,7 +73,7 @@ const getSpecificPath = async (
         }
 
         newsLists.push({
-          title: title,
+          title: title!,
           link: link!,
           source: source.name,
         });
@@ -122,36 +98,20 @@ const getNews = async (pieces: number) => {
       })
     );
   } catch (ex) {
-    // error
     console.log(ex);
   }
-  if (newsLists.length > 0) {
-    return newsLists;
-  }
+  if (newsLists.length > 0) return newsLists;
   return null;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // Run the middleware
-  await runMiddleware(req, res, cors);
-
-  // get query params -> number of new to fetch
-  let pieces: number = 2;
-  if (req.query.pieces !== undefined) {
-    pieces = parseInt(req.query.pieces as string);
-  }
-
-  // Rest of the API logic
-  let newsLists: News[] | null = await getNews(pieces);
-
-  if (newsLists !== null) {
-    res.status(200).json(newsLists);
-  } else {
-    res
-      .status(500)
-      .json({ error: "Something went wrong while fetch news resources" });
-  }
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const pieces = parseInt(searchParams.get("pieces") || "2", 10);
+  const newsLists = await getNews(pieces);
+  if (newsLists !== null) return NextResponse.json(newsLists);
+  return NextResponse.json(
+    { error: "Something went wrong while fetch news resources" },
+    { status: 500 }
+  );
 }
+

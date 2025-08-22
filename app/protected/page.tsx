@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/home/protected/Navbar";
-import Head from "next/head";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Prices from "../../components/home/Prices";
 import News from "../../components/home/News";
 import Quote from "../../components/general/Quote";
@@ -29,42 +29,35 @@ const defaultAssets = [
   "sushi",
   "near",
 ];
-let queryAssets = defaultAssets.join(",");
 
-let newsPieces = 3;
-
-const ProtectedHome = (props: {
-  darkMode: boolean;
-  handleDarkMode: () => void;
-  user_name: string;
-}): JSX.Element => {
+export default function ProtectedHome() {
   const router = useRouter();
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      // The user is not authenticated, handle it here.
-      router.push("/");
-    },
-  });
+  const { data: session, status } = useSession({ required: true });
+
+  useEffect(() => {
+    if (status === "unauthenticated") router.push("/");
+  }, [status, router]);
 
   const user = session?.user?.name;
 
-  // get data from the api
-  const [prices, setPrices] = useState<Prices[]>([]);
-  const [news, setNews] = useState<News[]>([]);
+  const [prices, setPrices] = useState<any[]>([]);
+  const [news, setNews] = useState<any[]>([]);
   const [priceLoading, setPriceLoading] = useState(true);
   const [newsLoading, setNewsLoading] = useState(true);
 
   useEffect(() => {
-    // find the size of the screen, update width every refresh
     const width = window.innerWidth;
+    let assets = defaultAssets;
+    let newsPieces = 3;
     if (width < 768) {
-      queryAssets = defaultAssets.slice(0, 8).join(",");
+      assets = defaultAssets.slice(0, 8);
       newsPieces = 1;
     } else if (width < 1024) {
-      queryAssets = defaultAssets.slice(0, 15).join(",");
+      assets = defaultAssets.slice(0, 15);
       newsPieces = 2;
     }
+
+    const queryAssets = assets.join(",");
 
     setPriceLoading(true);
     fetch(`/api/prices?assets=${queryAssets}`)
@@ -83,20 +76,12 @@ const ProtectedHome = (props: {
       });
   }, []);
 
+  if (status === "loading") {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
   return (
     <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
-      <Head>
-        <title>Seano&rsquo;s Trading Page</title>
-        <meta
-          name="description"
-          content="Website for crypto news, price, and trading ideas."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-          name="google-site-verification"
-          content="Q2eq-3vOWJK4BGDPiQWbFgFna4xbWmXlKZnGuPTBCbo"
-        />
-      </Head>
       <div>
         <NavBar />
         <main className="flex flex-col justify-center items-center -translate-y-[64px]">
@@ -109,12 +94,8 @@ const ProtectedHome = (props: {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 1 }}
                 >
-                  <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold">
-                    {user} &#128588;
-                  </h1>
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
-                    Welcome to...
-                  </h1>
+                  <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold">{user} &#128588;</h1>
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">Welcome to...</h1>
                   <div className="text-3xl md:text-5xl lg:text-6xl font-bold">
                     <Typewriter
                       onInit={(typewriter) => {
@@ -129,11 +110,7 @@ const ProtectedHome = (props: {
                           .pauseFor(2500)
                           .start();
                       }}
-                      options={{
-                        loop: true,
-                        delay: 75,
-                        autoStart: true,
-                      }}
+                      options={{ loop: true, delay: 75, autoStart: true }}
                     />
                   </div>
                 </motion.div>
@@ -141,14 +118,8 @@ const ProtectedHome = (props: {
               </>
             )}
           </div>
-          {
-            // if the prices are loading, show a loading screen
-            priceLoading ? <Loading /> : <Prices assets={prices} />
-          }
-          {
-            // if the news are loading, show a loading screen
-            newsLoading ? <Loading /> : <News newsList={news} />
-          }
+          {priceLoading ? <Loading /> : <Prices assets={prices} />}
+          {newsLoading ? <Loading /> : <News newsList={news} />}
           <motion.div className="flex flex-col justify-center items-center h-[40vh]">
             <motion.button
               onClick={() => router.push("/protected/ideas_home")}
@@ -165,6 +136,4 @@ const ProtectedHome = (props: {
       </div>
     </div>
   );
-};
-
-export default ProtectedHome;
+}

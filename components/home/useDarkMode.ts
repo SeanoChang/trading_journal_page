@@ -18,7 +18,14 @@ const useDarkMode = (): [boolean, () => void] => {
     const localTheme = window.localStorage.getItem("theme");
     // if local storage has a theme, set it
     if (localTheme) {
-      setTheme(JSON.parse(localTheme));
+      try {
+        const parsed = JSON.parse(localTheme);
+        setTheme(!!parsed);
+      } catch {
+        const normalized = localTheme.replace(/"/g, "").toLowerCase();
+        if (normalized === "dark" || normalized === "true") setTheme(true);
+        else if (normalized === "light" || normalized === "false") setTheme(false);
+      }
     }
   }, []);
 
