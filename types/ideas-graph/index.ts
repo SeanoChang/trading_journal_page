@@ -2,7 +2,7 @@ export interface Idea {
   id: string;
   title: string;
   content: string;
-  topic: string;
+  topic: string; // e.g., Breakout, Journal, etc.
   tags: string[];
   trades?: string[];
   createdAt: string;
@@ -45,13 +45,13 @@ export interface Link {
   source: string | Node; 
   target: string | Node; 
   weight: number; 
-  kind: "topic" | "tag" | "strategy" | "temporal" | "hierarchy";
+  kind: "topic" | "tag" | "strategy" | "temporal" | "hierarchy" | "ticker";
   distance: number;
   strength: number;
   age?: number; // for temporal links
 }
 
-export type LinkMode = "all" | "temporal" | "conceptual" | "hierarchy";
+export type LinkMode = "all" | "temporal" | "conceptual" | "hierarchy" | "ticker";
 
 export interface GraphData {
   nodes: Node[];

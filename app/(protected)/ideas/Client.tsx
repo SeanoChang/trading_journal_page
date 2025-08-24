@@ -5,102 +5,82 @@ import { Button } from "@heroui/react";
 import IdeasListView from "../../../components/ideas/ListView";
 import IdeasMindMapView from "../../../components/ideas/MindMapView";
 import CalendarView from "../../../components/ideas/CalendarView";
-
-type Mood = "VERY_NEGATIVE" | "NEGATIVE" | "NEUTRAL" | "POSITIVE" | "VERY_POSITIVE";
-
-type Idea = {
-  id: string;
-  title: string;
-  content: string;
-  mood?: Mood;
-  confidence?: number; // 1-10 scale
-  tags: string[];
-  trades: string[];
-  createdAt: string; // ISO
-  winrate?: number;
-  strategy?: string;
-};
-
-type JournalEntry = {
-  id: string;
-  date: string; // YYYY-MM-DD
-  title: string;
-  notes: string;
-  mood: number;
-  energy?: number;
-  adherence?: boolean;
-  r?: number;
-  tags: string[];
-  topic?: string;
-};
+import type { JournalEntryWithTags } from "../../../types/ideas";
 
 export default function IdeasHomeClient({ tradingPairs }: { tradingPairs: string[] }) {
   const [view, setView] = useState<"calendar" | "list" | "mindmap">("calendar");
 
-  // demo data (replace with real data source later)
-  const ideas = useMemo<Idea[]>(() => [
-    { id: "1", title: "Breakout on retest", content: "ETH 4H retest with volume spike", mood: "POSITIVE", confidence: 7, tags: ["setup","momentum"], trades: ["ETH/USDT", "ETH/BTC"], createdAt: new Date().toISOString(), winrate: 58, strategy: "Momentum Trading" },
-    { id: "2", title: "Mean reversion RSI<30", content: "BTC 1H oversold bounce", mood: "VERY_POSITIVE", confidence: 9, tags: ["setup","rsi"], trades: ["BTC/USDT"], createdAt: new Date().toISOString(), winrate: 62, strategy: "Contrarian" },
-    { id: "3", title: "News catalyst fade", content: "SOL spike after listing -> fade", mood: "NEGATIVE", confidence: 4, tags: ["setup","risk"], trades: ["SOL/USDT"], createdAt: new Date().toISOString(), winrate: 47, strategy: "Event Trading" },
-    { id: "4", title: "Range EQH sweep", content: "Sweep highs then short to mid", mood: "NEUTRAL", confidence: 6, tags: ["liquidity","setup"], trades: ["MATIC/USDT"], createdAt: new Date().toISOString(), winrate: 54, strategy: "Liquidity Hunt" },
-    { id: "5", title: "Support bounce play", content: "Daily support level bounce with confluence", mood: "POSITIVE", confidence: 8, tags: ["setup","confluence"], trades: ["ADA/USDT", "DOT/USDT"], createdAt: new Date().toISOString(), winrate: 65, strategy: "Momentum Trading" },
-    { id: "6", title: "Bear flag continuation", content: "Flag pattern after strong bearish move", mood: "VERY_NEGATIVE", confidence: 3, tags: ["pattern","short"], trades: ["AVAX/USDT"], createdAt: new Date().toISOString(), winrate: 59, strategy: "Pattern Trading" },
-  ], []);
+  // Journal entries from database
+  const [journalEntries, setJournalEntries] = useState<JournalEntryWithTags[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // user ideas persisted locally to encourage jotting (legacy idea items)
-  const [userIdeas, setUserIdeas] = useState<Idea[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const raw = localStorage.getItem("ideasUser");
-      const parsed = raw ? (JSON.parse(raw) as Idea[]) : [];
-      if (Array.isArray(parsed)) return parsed;
-      return [];
-    } catch {
-      return [];
-    }
-  });
-
+  // Fetch journal entries from database
   useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const response = await fetch('/api/journal');
+        if (response.ok) {
+          const entries = await response.json();
+          // Handle both empty array and populated array gracefully
+          setJournalEntries(Array.isArray(entries) ? entries : []);
+        } else {
+          // Handle specific error cases
+          if (response.status === 401) {
+            console.warn('User not authenticated');
+          } else {
+            console.error(`Failed to fetch journal entries: ${response.status}`);
+          }
+          // Set empty array on error so UI shows "no entries" instead of loading
+          setJournalEntries([]);
+        }
+      } catch (error) {
+        console.error('Network error fetching journal entries:', error);
+        // Set empty array on network error
+        setJournalEntries([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEntries();
+  }, []);
+
+  // Create or update journal entry
+  const createJournalEntry = async (entry: {
+    title?: string;
+    content?: string;
+    date: Date;
+    mood?: import('@prisma/client').Mood;
+    confidence?: number;
+    winRate?: number;
+    tagNames?: string[];
+    tradeIds?: string[];
+  }) => {
     try {
-      localStorage.setItem("ideasUser", JSON.stringify(userIdeas));
-    } catch {}
-  }, [userIdeas]);
-
-  const allIdeas = useMemo(() => [...userIdeas, ...ideas], [userIdeas, ideas]);
-
-
-  // Journal entries (new model) persisted locally
-  const [entries, setEntries] = useState<JournalEntry[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const raw = localStorage.getItem("journalEntries");
-      const parsed = raw ? (JSON.parse(raw) as JournalEntry[]) : [];
-      if (Array.isArray(parsed)) return parsed;
-      return [];
-    } catch {
-      return [];
+      const response = await fetch('/api/journal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entry),
+      });
+      if (response.ok) {
+        const newEntry = await response.json();
+        setJournalEntries(prev => [newEntry, ...prev]);
+      } else {
+        console.error('Failed to create journal entry');
+      }
+    } catch (error) {
+      console.error('Error creating journal entry:', error);
     }
-  });
+  };
 
-  useEffect(() => {
-    try {
-      localStorage.setItem("journalEntries", JSON.stringify(entries));
-    } catch {}
-  }, [entries]);
 
-  const entriesAsIdeas = useMemo<Idea[]>(() =>
-    entries.map((e) => ({
-      id: e.id,
-      title: e.title,
-      content: e.notes,
-      topic: e.topic || "Journal",
-      tags: e.tags,
-      trades: [], // Journal entries don't have trades by default
-      createdAt: `${e.date}T00:00:00.000Z`,
-      winrate: undefined,
-      strategy: undefined,
-    })),
-  [entries]);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full bg-slate-50 dark:bg-[#0b0b16] flex items-center justify-center">
+        <div className="text-slate-600 dark:text-slate-300">Loading journal entries...</div>
+      </div>
+    );
+  }
 
   const container = { hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.06, delayChildren: 0.04 } } } as const;
   const item = { hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } } as const;
@@ -121,38 +101,18 @@ export default function IdeasHomeClient({ tradingPairs }: { tradingPairs: string
 
         {view === "calendar" && (
           <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8">
-            <CalendarView ideas={entriesAsIdeas} onAdd={(i) => {
-              // Convert Idea back to JournalEntry format
-              const entry: JournalEntry = {
-                id: crypto.randomUUID?.() ?? String(Math.random()),
-                date: i.createdAt.slice(0, 10),
-                title: i.title,
-                notes: i.content,
-                mood: i.mood ? (
-                  i.mood === "VERY_POSITIVE" ? 5 :
-                  i.mood === "POSITIVE" ? 4 :
-                  i.mood === "NEUTRAL" ? 3 :
-                  i.mood === "NEGATIVE" ? 2 : 1
-                ) : 3, // Default mood
-                energy: i.confidence || 3, // Use confidence as energy or default
-                adherence: true, // Default adherence
-                r: undefined,
-                tags: i.tags,
-                topic: undefined, // Remove topic mapping
-              };
-              setEntries((prev) => [entry, ...prev]);
-            }} />
+            <CalendarView entries={journalEntries} onAdd={createJournalEntry} />
           </div>
         )}
 
         {view === "list" && (
           <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8">
-            <IdeasListView ideas={allIdeas} />
+            <IdeasListView entries={journalEntries} />
           </div>
         )}
         {view === "mindmap" && (
           <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8">
-            <IdeasMindMapView ideas={allIdeas} />
+            <IdeasMindMapView entries={journalEntries} />
           </div>
         )}
 

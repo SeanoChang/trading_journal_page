@@ -2,29 +2,29 @@
 import { useMemo } from "react";
 import { Chip } from "@heroui/react";
 import { FiCalendar, FiTag } from "react-icons/fi";
-import { Idea } from "../../types/ideas-graph";
+import type { JournalEntryWithTags } from "../../types/ideas";
 
-export default function IdeasListView({ ideas }: { ideas: Idea[] }) {
-  // Group ideas by date
+export default function IdeasListView({ entries }: { entries: JournalEntryWithTags[] }) {
+  // Group entries by date
   const timelineGroups = useMemo(() => {
-    const groups = new Map<string, Idea[]>();
+    const groups = new Map<string, JournalEntryWithTags[]>();
     
-    // Sort ideas by creation date (newest first)
-    const sortedIdeas = [...ideas].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    // Sort entries by date (newest first)
+    const sortedEntries = [...entries].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    sortedIdeas.forEach((idea) => {
-      const dateKey = new Date(idea.createdAt).toDateString();
+    sortedEntries.forEach((entry) => {
+      const dateKey = new Date(entry.date).toDateString();
       const existing = groups.get(dateKey) || [];
-      groups.set(dateKey, [...existing, idea]);
+      groups.set(dateKey, [...existing, entry]);
     });
 
-    return Array.from(groups.entries()).map(([date, ideas]) => ({
+    return Array.from(groups.entries()).map(([date, entries]) => ({
       date,
-      ideas: ideas.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      entries: entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     }));
-  }, [ideas]);
+  }, [entries]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -70,18 +70,18 @@ export default function IdeasListView({ ideas }: { ideas: Idea[] }) {
                   {formatDate(group.date)}
                 </h3>
                 <Chip size="sm" variant="flat" className="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">
-                  {group.ideas.length} {group.ideas.length === 1 ? 'entry' : 'entries'}
+                  {group.entries.length} {group.entries.length === 1 ? 'entry' : 'entries'}
                 </Chip>
               </div>
             </div>
 
             {/* Timeline entries for this date */}
             <div className="space-y-4">
-              {group.ideas.map((idea, ideaIndex) => {
-                const animationDelay = `${(groupIndex * 200) + (ideaIndex * 100)}ms`;
+              {group.entries.map((entry, entryIndex) => {
+                const animationDelay = `${(groupIndex * 200) + (entryIndex * 100)}ms`;
                 return (
                   <div 
-                    key={idea.id} 
+                    key={entry.id} 
                     className="relative ml-12 animate-in fade-in-0 slide-in-from-left-2"
                     style={{ animationDelay }}
                   >
@@ -94,25 +94,25 @@ export default function IdeasListView({ ideas }: { ideas: Idea[] }) {
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-base mb-1">
-                            {idea.title}
+                            {entry.title || "Untitled Entry"}
                           </h4>
                           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                            <span>{formatTime(idea.createdAt)}</span>
+                            <span>{formatTime(entry.date.toISOString())}</span>
                             <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
                             <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
-                              {idea.topic}
+                              Journal Entry
                             </span>
-                            {idea.winrate && (
+                            {entry.winRate && (
                               <>
                                 <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
                                 <span className={`px-2 py-0.5 rounded-full text-xs ${
-                                  idea.winrate >= 60 
+                                  entry.winRate >= 60 
                                     ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                                    : idea.winrate >= 50
+                                    : entry.winRate >= 50
                                     ? 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
                                     : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                                 }`}>
-                                  {idea.winrate}% win rate
+                                  {entry.winRate}% win rate
                                 </span>
                               </>
                             )}
@@ -122,41 +122,41 @@ export default function IdeasListView({ ideas }: { ideas: Idea[] }) {
 
                       {/* Content */}
                       <p className="text-slate-600 dark:text-slate-300 text-sm line-clamp-3 mb-3 leading-relaxed">
-                        {idea.content}
+                        {entry.content || "No content"}
                       </p>
 
-                      {/* Tags and Trades */}
+                      {/* Tags and Metadata */}
                       <div className="space-y-2">
-                        {idea.tags && idea.tags.length > 0 && (
+                        {entry.tags && entry.tags.length > 0 && (
                           <div className="flex items-center gap-2 flex-wrap">
                             <FiTag className="h-3 w-3 text-slate-400" />
-                            {idea.tags.map((tag, tagIndex) => (
+                            {entry.tags.map((tag, tagIndex) => (
                               <Chip 
-                                key={tag} 
+                                key={tag.id} 
                                 size="sm" 
                                 variant="flat"
                                 className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 animate-in fade-in-0 slide-in-from-bottom-1"
-                                style={{ animationDelay: `${parseInt(animationDelay) + (tagIndex * 50)}ms` }}
+                                style={{ animationDelay: `${parseInt(animationDelay) + (tagIndex * 50)}ms`, backgroundColor: tag.color || undefined }}
                               >
-                                {tag}
+                                {tag.name}
                               </Chip>
                             ))}
                           </div>
                         )}
-                        {idea.trades && idea.trades.length > 0 && (
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-emerald-600 text-sm">📈</span>
-                            {idea.trades.map((trade, tradeIndex) => (
-                              <Chip 
-                                key={trade} 
-                                size="sm" 
-                                variant="flat"
-                                className="bg-emerald-100 dark:bg-emerald-800 text-emerald-700 dark:text-emerald-300 animate-in fade-in-0 slide-in-from-bottom-1"
-                                style={{ animationDelay: `${parseInt(animationDelay) + 200 + (tradeIndex * 50)}ms` }}
-                              >
-                                {trade}
-                              </Chip>
-                            ))}
+                        {entry.mood && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-slate-500">Mood:</span>
+                            <Chip size="sm" variant="flat" className="text-xs">
+                              {entry.mood.replace('_', ' ').toLowerCase()}
+                            </Chip>
+                          </div>
+                        )}
+                        {entry.confidence && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-slate-500">Confidence:</span>
+                            <Chip size="sm" variant="flat" className="text-xs">
+                              {entry.confidence}/10
+                            </Chip>
                           </div>
                         )}
                       </div>

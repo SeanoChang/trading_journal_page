@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import type { OrderStatus as PrismaOrderStatus, Side as PrismaSide, WinLoss as PrismaWinLoss } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -29,9 +30,9 @@ import {
 import { motion } from "framer-motion";
 import { FiClock, FiTrendingUp, FiTrendingDown, FiCalendar, FiTarget, FiShield, FiBarChart, FiChevronUp, FiChevronDown } from "react-icons/fi";
 
-type OrderStatus = "PLAN_AHEAD" | "OPEN" | "EXECUTED";
-type Side = "BUY" | "SELL";
-type WinLoss = "WIN" | "LOSS" | "BREAKEVEN" | null;
+type OrderStatus = PrismaOrderStatus;
+type Side = PrismaSide;
+type WinLoss = PrismaWinLoss | null;
 
 type Trade = {
   id: string;
