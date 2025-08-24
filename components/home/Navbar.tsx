@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
-import BTC from "../../public/blockchain_icon/blockchain_04.png";
-import ETH from "../../public/blockchain_icon/blockchain_14.png";
+import { BsMoon, BsSun } from "react-icons/bs";
 import { motion, useScroll, useSpring } from "framer-motion";
-import Image from "next/image";
 import { BiHomeAlt, BiNews, BiDollar } from "react-icons/bi";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import useDarkMode from "../home/useDarkMode";
 
-const linkIcons: JSX.Element[] = [
+const linkIcons = [
   <BiHomeAlt className="text-2xl md:text-3xl lg:text-4xl" key={1} />,
   <BiDollar className="text-2xl md:text-3xl lg:text-4xl" key={2} />,
   <BiNews className="text-2xl md:text-3xl lg:text-4xl" key={3} />,
   <HiOutlineLightBulb className="text-2xl md:text-3xl lg:text-4xl" key={4} />,
 ];
 
-const NavBar = (props: { links: string[] }): JSX.Element => {
+const NavBar = (props: { links: string[] }) => {
   // darkmode state
   const [darkMode, setDarkMode] = useDarkMode();
 
@@ -27,7 +25,7 @@ const NavBar = (props: { links: string[] }): JSX.Element => {
   }, [darkMode]);
 
   // list of links to other sections of the page
-  const links: JSX.Element[] = props.links.map((link: string, key: number) => {
+  const links = props.links.map((link: string, key: number) => {
     return (
       <a
         className="text-xs md:text-base lg:text-2xl hover:cursor-pointer hover:underline hover:underline-offset-4"
@@ -60,16 +58,14 @@ const NavBar = (props: { links: string[] }): JSX.Element => {
           {links}
         </div>
         <div className="flex flex-row justify-center items-center h-full w-1/5">
-          <div
+          <button
             className="text-base lg:text-3xl hover:cursor-pointer"
             onClick={setDarkMode}
+            aria-label="Toggle theme"
+            title="Toggle theme"
           >
-            {darkMode ? (
-              <Image src={ETH} alt="Light" width={35} height={35} />
-            ) : (
-              <Image src={BTC} alt="Dark" width={35} height={35} />
-            )}
-          </div>
+            {darkMode ? <BsSun /> : <BsMoon />}
+          </button>
         </div>
       </div>
       <motion.div

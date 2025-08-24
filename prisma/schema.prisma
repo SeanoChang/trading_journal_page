@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -47,6 +47,8 @@ model User {
   role          Role      @default(USER)
   accounts      Account[]
   sessions      Session[]
+  trades        Trade[]
+  journalEntries JournalEntry[]
 }
 
 enum Role {
@@ -79,4 +81,106 @@ model Post {
   authorId  String
   createdAt DateTime @default(now())
   comments  Comment[] 
+}
+
+model Trade {
+  id            String    @id @default(cuid())
+  userId        String
+  pair          String
+  orderStatus   OrderStatus
+  side          Side
+  
+  // Plan ahead fields
+  limitPrice    Float?
+  takeProfit    Float?
+  stopLoss      Float?
+  
+  // Executed trade fields
+  entryPrice    Float?
+  exitPrice     Float?
+  entryTime     DateTime?
+  exitTime      DateTime?
+  
+  // Calculated fields
+  pnl           Float?
+  winLoss       WinLoss?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  journalEntries JournalEntry[]
+}
+
+enum OrderStatus {
+  PLAN_AHEAD
+  OPEN
+  EXECUTED
+}
+
+enum Side {
+  BUY
+  SELL
+}
+
+enum WinLoss {
+  WIN
+  LOSS
+  BREAKEVEN
+}
+
+model JournalEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  date        DateTime @default(now())
+  title       String?
+  content     String?  @db.Text
+  
+  // Optional metadata
+  mood        Mood?
+  confidence  Int?     // 1-10 scale
+  winRate     Float?   // Daily win rate percentage
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        JournalTag[]
+  setups      Setup[]
+  trades      Trade[]
+  
+  @@index([userId, date])
+}
+
+model JournalTag {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  color         String?        @default("#3B82F6")
+  
+  // Relations
+  journalEntries JournalEntry[]
+  
+  @@index([name])
+}
+
+model Setup {
+  id            String         @id @default(cuid())
+  name          String         @unique // e.g., "setup", "momentum", "rsi", "liquidity"
+  description   String?
+  
+  // Relations
+  journalEntries JournalEntry[]
+  
+  @@index([name])
+}
+
+// Enums
+enum Mood {
+  VERY_NEGATIVE
+  NEGATIVE  
+  NEUTRAL
+  POSITIVE
+  VERY_POSITIVE
 }

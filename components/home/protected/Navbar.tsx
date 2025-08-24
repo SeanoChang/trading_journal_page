@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import BTC from "../../../public/blockchain_icon/blockchain_04.png";
-import ETH from "../../../public/blockchain_icon/blockchain_14.png";
+import { BsMoon, BsSun } from "react-icons/bs";
 import { signOut } from "next-auth/react";
 import { RxExit } from "react-icons/rx";
-import Image from "next/image";
 import useDarkMode from "../useDarkMode";
 
 const inPageLinks: string[] = ["Home", "Rules", "Ideas", "Resources"];
 
-const NavBar = (): JSX.Element => {
+const NavBar = () => {
   // darkmode state
   const [darkMode, setDarkMode] = useDarkMode();
 
@@ -22,7 +20,7 @@ const NavBar = (): JSX.Element => {
   }, [darkMode]);
 
   // list of links to other sections of the page
-  const links: JSX.Element[] = inPageLinks.map((link: string, key: number) => {
+  const links = inPageLinks.map((link: string, key: number) => {
     return (
       <a
         className="text-xs md:text-base lg:text-2xl hover:cursor-pointer hover:underline hover:underline-offset-4"
@@ -58,16 +56,14 @@ const NavBar = (): JSX.Element => {
           {links}
         </div>
         <div className="flex flex-row justify-center items-center h-full w-1/5">
-          <div
+          <button
             className="text-base lg:text-3xl hover:cursor-pointer"
             onClick={setDarkMode}
+            aria-label="Toggle theme"
+            title="Toggle theme"
           >
-            {darkMode ? (
-              <Image src={ETH} alt="Light" width={35} height={35} />
-            ) : (
-              <Image src={BTC} alt="Dark" width={35} height={35} />
-            )}
-          </div>
+            {darkMode ? <BsSun /> : <BsMoon />}
+          </button>
         </div>
       </div>
       <motion.div

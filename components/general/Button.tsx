@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const Button = (props: { onclick: any; text: string }): JSX.Element => {
+const Button = (props: { onclick: any; text: string }) => {
   const ref = useRef(null);
 
   const { scrollYProgress } = useScroll({

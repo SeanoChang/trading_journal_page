@@ -11,7 +11,7 @@ const rules: string[] = [
   "Look for liquidity",
 ];
 
-const Rule = (props: { rule: string }): JSX.Element => {
+const Rule = (props: { rule: string }) => {
   return (
     <div className="flex flex-col justify-center items-center text-center p-4 m-1 rounded-full w-full h-24 text-xl md:text-2xl lg:text-3xl transition duration-150 hover:text-[#ea4c4c] hover:bg-slate-200">
       <p>{props.rule}</p>
@@ -19,7 +19,7 @@ const Rule = (props: { rule: string }): JSX.Element => {
   );
 };
 
-const Rules = (): JSX.Element => {
+const Rules = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}

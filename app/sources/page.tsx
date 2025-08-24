@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function SourcesPage() {
   const ListItems = ({ link, text }: { link: string; text: string }) => (
     <li className="hover:underline text-lg md:text-xl">
@@ -11,7 +13,7 @@ export default function SourcesPage() {
     <div className="min-h-screen w-full flex flex-col justify-center items-center">
       <main>
         <div className="sticky w-full">
-          <a href="/">Back</a>
+          <Link href="/">Back</Link>
         </div>
         <h1>Sources Page</h1>
         <div>

@@ -1,26 +1,25 @@
-import { motion } from "framer-motion";
+const Loading = () => {
+  const cards = Array.from({ length: 6 });
 
-const Loading = (): JSX.Element => {
   return (
-    <div className="flex flex-col justify-center items-center h-[50vh]">
-      <svg className="w-[150px] h-[210px] flex flex-col justify-center items-center">
-        <motion.polyline
-          points="5,200 20,100 50,130 65,40 100,150 120,80 150,250"
-          className="fill-none stroke-current text-[#539b66] stroke-[3px]"
-          initial={{ pathLength: 0 }}
-          animate={{
-            pathLength: 1,
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            repeatType: "loop",
-            repeatDelay: 1,
-          }}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+    <div className="w-full">
+      <div className="mx-auto max-w-6xl px-6 md:px-8 lg:px-10 py-8 md:py-10">
+        <div className="mb-6">
+          <div className="h-4 w-40 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          {cards.map((_, i) => (
+            <div key={i} className="group">
+              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
+              <div className="mt-2 space-y-2">
+                <div className="h-4 w-5/6 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+                <div className="h-4 w-2/3 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+                <div className="mt-1 h-3 w-1/3 rounded bg-slate-200 dark:bg-slate-800 animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

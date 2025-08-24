@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import type { ReactNode } from "react";
 import Providers from "./providers";
+import AppChrome from "../components/general/AppChrome";
 
 export const metadata = {
   title: "Seano’s Trading Page",
@@ -14,9 +15,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppChrome>{children}</AppChrome>
+        </Providers>
       </body>
     </html>
   );
 }
-

@@ -1,4 +1,4 @@
-const Footer = (): JSX.Element => {
+const Footer = () => {
   return (
     <footer className="flex flex-col justify-center items-center py-8">
       <p className="p-4 text-center">

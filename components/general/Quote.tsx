@@ -6,7 +6,7 @@ type Quote = {
   author: string;
 };
 
-const Quote = (props: { rand: number }): JSX.Element => {
+const Quote = (props: { rand: number }) => {
   const initialIndex = props.rand % quotes.length;
   const [quote, setQuote] = useState<Quote>(quotes[initialIndex]);
   const [rand, setRand] = useState<number>(props.rand);

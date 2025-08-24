@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Typewriter from "typewriter-effect";
 
-const Header = (): JSX.Element => {
+const Header = () => {
   return (
     <motion.div
       initial={{ opacity: 0, y: -100 }}

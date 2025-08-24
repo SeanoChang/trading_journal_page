@@ -1,6 +1,6 @@
 import React from "react";
 
-const TradingRecordLink = (): JSX.Element => {
+const TradingRecordLink = () => {
   return (
     <div className="trading-record">
       <h2>Trading Record</h2>

@@ -1,6 +1,6 @@
 // import
 import React from "react";
 
-const PairInfo = (): JSX.Element => {
+const PairInfo = () => {
   return <div className="flex"></div>;
 };

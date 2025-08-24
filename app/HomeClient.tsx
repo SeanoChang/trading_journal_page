@@ -1,103 +1,41 @@
 "use client";
-import NavBar from "../components/home/Navbar";
-import Footer from "../components/general/Footer";
-import Button from "../components/general/Button";
-import { signIn } from "next-auth/react";
+import { Spacer } from "@heroui/react";
 import { motion } from "framer-motion";
-import Prices from "../components/home/Prices";
-import News from "../components/home/News";
-import Loading from "../components/general/Loading";
-import Quote from "../components/general/Quote";
-import Image from "next/image";
-import TradingImage from "../public/blockchain_icon/blockchain_44.png";
-import React, { useState, useEffect } from "react";
+import { useMarketData } from "../hooks/useMarketData";
+import { Hero } from "../components/home/Hero";
+import { Features } from "../components/home/Features";
+import { ProductPreviewTabs } from "../components/home/ProductPreviewTabs";
+import { FAQ } from "../components/home/FAQ";
+import { Footer } from "../components/home/Footer";
 
-const defaultAssets = [
-  "btc",
-  "eth",
-  "xrp",
-  "ada",
-  "doge",
-  "ape",
-  "dot",
-  "atom",
-  "sol",
-  "aave",
-  "bnb",
-  "etc",
-  "chz",
-  "ens",
-  "sushi",
-  "near",
-];
-
-export default function HomeClient({ randQuote }: { randQuote: number }) {
-  const [prices, setPrices] = useState<any[]>([]);
-  const [news, setNews] = useState<any[]>([]);
-  const [priceLoading, setPriceLoading] = useState(true);
-  const [newsLoading, setNewsLoading] = useState(true);
-
-  useEffect(() => {
-    const width = window.innerWidth;
-    let assets = defaultAssets;
-    let newsPieces = 3;
-    if (width < 768) {
-      assets = defaultAssets.slice(0, 8);
-      newsPieces = 1;
-    } else if (width < 1024) {
-      assets = defaultAssets.slice(0, 15);
-      newsPieces = 2;
-    }
-    const queryAssets = assets.join(",");
-
-    setPriceLoading(true);
-    fetch(`/api/prices?assets=${queryAssets}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setPrices(data);
-        setPriceLoading(false);
-      });
-
-    setNewsLoading(true);
-    fetch(`/api/news?pieces=${newsPieces}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setNews(data);
-        setNewsLoading(false);
-      });
-  }, []);
-
-  const navLinks: string[] = ["Home", "Prices", "News", "Ideas"];
+export default function HomeClient() {
+  const { market, loading } = useMarketData();
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-      <div className="w-full text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-[#161624] shadow-slate-900/50 dark:shadow-slate-300/50">
-        <NavBar links={navLinks} />
-        <main className="-translate-y-[64px]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            id="home"
-            className="flex flex-col justify-center items-center min-h-screen"
-          >
-            <div className="flex flex-row justify-content items-center">
-              <h1 className="text-4xl md:text-6xl lg:text-9xl font-bold h-1/3 z-10">Trading</h1>
-              <div className="h-[40px] w-[40px] md:h-[70px] md:w-[70px] lg:h-36 lg:w-36 ml-2">
-                <Image src={TradingImage} alt="trading" />
-              </div>
-            </div>
-            <Quote rand={randQuote} />
-          </motion.div>
-          {priceLoading ? <Loading /> : <Prices assets={prices} />}
-          {newsLoading ? <Loading /> : <News newsList={news} />}
-          <div className="flex flex-col justify-center items-center h-[50vh]" id="ideas">
-            <Button onclick={signIn} text={"Sign in to see more..."} />
-          </div>
-        </main>
-        <Footer />
-      </div>
-    </motion.div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 to-slate-200 dark:from-[#0b0b16] dark:to-[#18182b] text-slate-800 dark:text-slate-100">
+      {/* Subtle grid overlay */}
+      <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.04] dark:opacity-[0.06]" aria-hidden>
+        <defs>
+          <pattern id="grid-landing" width="32" height="32" patternUnits="userSpaceOnUse">
+            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid-landing)" />
+      </svg>
+      {/* Glow accents */}
+      <motion.div aria-hidden initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-white/40 dark:bg-white/5 blur-2xl" />
+      <motion.div aria-hidden initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-white/40 dark:bg-white/5 blur-3xl" />
+      {/* Top navigation moved to RootLayout */}
+
+      <main className="relative z-10 px-6 md:px-10 lg:px-16">
+        <Hero market={market} loading={loading} />
+        <Features />
+        <ProductPreviewTabs />
+        <FAQ />
+        <Spacer y={8} />
+      </main>
+
+      <Footer />
+    </div>
   );
 }
-

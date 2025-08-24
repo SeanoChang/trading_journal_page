@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import BTC from "../../../../public/blockchain_icon/blockchain_04.png";
-import ETH from "../../../../public/blockchain_icon/blockchain_14.png";
-import Image from "next/image";
+import { BsMoon, BsSun } from "react-icons/bs";
 import useDarkMode from "../../useDarkMode";
 import { RiArrowLeftCircleLine } from "react-icons/ri";
 
-const NavBar = (props: { symbol: string }): JSX.Element => {
+const NavBar = (props: { symbol: string }) => {
   // darkmode state
   const [darkMode, setDarkMode] = useDarkMode();
 
@@ -50,16 +48,14 @@ const NavBar = (props: { symbol: string }): JSX.Element => {
           </div>
         </div>
         <div className="flex flex-row justify-center items-center h-full w-[10%] lg:w-1/5">
-          <div
+          <button
             className="text-base lg:text-3xl hover:cursor-pointer"
             onClick={setDarkMode}
+            aria-label="Toggle theme"
+            title="Toggle theme"
           >
-            {darkMode ? (
-              <Image src={ETH} alt="Light" width={35} height={35} />
-            ) : (
-              <Image src={BTC} alt="Dark" width={35} height={35} />
-            )}
-          </div>
+            {darkMode ? <BsSun /> : <BsMoon />}
+          </button>
         </div>
       </div>
       <motion.div

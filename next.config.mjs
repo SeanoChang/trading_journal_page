@@ -35,6 +35,50 @@ const nextConfig = {
     COINMARKETCAP_API_KEY: process.env.COINMARKETCAP_API_KEY,
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'md'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cryptoslate.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.cryptoslate.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.coindesk.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'coindesk.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.coindesk.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cointelegraph.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.cointelegraph.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'decrypt.co',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.decrypt.co',
+      },
+    ],
+  },
 }
 
 export default withMDX(nextConfig);

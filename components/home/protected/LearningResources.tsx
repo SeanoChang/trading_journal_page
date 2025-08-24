@@ -89,7 +89,7 @@ const tradingBooks: Book[] = [
   },
 ];
 
-const BookItem = (props: { book: Book }): JSX.Element => {
+const BookItem = (props: { book: Book }) => {
   const ref = useRef(null);
   const inView = useInView(ref, {
     once: true,
@@ -121,7 +121,7 @@ const BookItem = (props: { book: Book }): JSX.Element => {
   );
 };
 
-const LearningResources = (): JSX.Element => {
+const LearningResources = () => {
   const bookItems = tradingBooks.map((book: Book) => (
     <BookItem key={book.id} book={book} />
   ));

@@ -1,33 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Typewriter from "typewriter-effect";
 
-const TradingIdeas = (props: { tradingPairs: string[] }): JSX.Element => {
+const TradingIdeas = (props: { tradingPairs: string[] }) => {
   const pairs = props.tradingPairs.map((pair: string) => {
-    // get rid of the -usdt part of the symbol
     const symbol = pair.split("-")[0];
-    let image;
-
-    // try get the image for the symbol
-    try {
-      image = require(`../../../public/icon/${symbol}.png`);
-    } catch (err) {
-      image = require(`../../../public/icon/default.png`);
-    }
-
     return (
       <div key={pair}>
         <div className="flex flex-row justify-center items-center text-center w-full sm:w-[268px] md:w-48 rounded-xl p-5 m-1 text-teal-700 hover:text-teal-100 hover:bg-[#62aa7f] dark:hover:bg-teal-100 dark:text-teal-200 dark:hover:text-teal-800 transition duration-100">
           <span className="flex flex-row justify-center items-center">
-            <div className="rounded-full overflow-hidden m-1 mr-2">
-              <Image src={image} alt={`${symbol}`} width={40} height={40} />
+            <div className="rounded-full m-1 mr-2 h-10 w-10 flex items-center justify-center bg-slate-300 dark:bg-slate-600 text-slate-800 dark:text-slate-100">
+              {symbol.slice(0, 3).toUpperCase()}
             </div>
-            <a
-              href={`/protected/ideas_home/${pair}`}
-              className="hover:underline"
-            >
-              {pair.toUpperCase().split("-")[0]}
+            <a href={`/protected/ideas_home/${pair}`} className="hover:underline">
+              {symbol.toUpperCase()}
             </a>
           </span>
         </div>
