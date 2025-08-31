@@ -10,7 +10,6 @@ export async function GET() {
       return NextResponse.json({ error: "No session found" }, { status: 401 });
     }
 
-    // Log session structure for debugging
     console.log("Session structure:", JSON.stringify(session, null, 2));
 
     return NextResponse.json({ 

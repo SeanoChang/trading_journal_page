@@ -6,16 +6,9 @@ import { useRouter } from "next/navigation";
 import {
   Input,
   Button,
-  Select,
-  SelectItem,
   Autocomplete,
   AutocompleteItem,
-  Card,
-  CardBody,
-  CardHeader,
   Chip,
-  Divider,
-  Switch,
   Modal,
   ModalContent,
   ModalHeader,
@@ -28,7 +21,7 @@ import {
   Tab,
 } from "@heroui/react";
 import { motion } from "framer-motion";
-import { FiClock, FiTrendingUp, FiTrendingDown, FiCalendar, FiTarget, FiShield, FiBarChart, FiChevronUp, FiChevronDown } from "react-icons/fi";
+import { FiClock, FiTrendingUp, FiTrendingDown, FiCalendar, FiTarget, FiShield } from "react-icons/fi";
 
 type OrderStatus = PrismaOrderStatus;
 type Side = PrismaSide;

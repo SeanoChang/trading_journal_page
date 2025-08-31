@@ -11,6 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.879.0",
     "@heroui/react": "^2.8.2",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
