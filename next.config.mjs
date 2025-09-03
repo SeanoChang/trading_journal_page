@@ -1,29 +1,17 @@
-import remarkFrontmatter from "remark-frontmatter";
-import remarkGfm from "remark-gfm";
-import rehypeExternalLinks from "rehype-external-links";
-
-import fauxRemarkEmbedder from "@remark-embedder/core";
-import fauxOembedTransformer from "@remark-embedder/transformer-oembed";
-const remarkEmbedder = fauxRemarkEmbedder.default;
-const oembedTransformer = fauxOembedTransformer.default;
-
 import createMDX from "@next/mdx";
 
 /** @type {import('next').NextConfig} */
 
 const withMDX = createMDX({
-  extension: /\.mdx?$/,
+  // Omit custom `extension` to avoid non-serializable RegExp; `mdx` is already in `pageExtensions` below.
   options: {
-    // If you use remark-gfm, you'll need to use next.config.mjs
-    // as the package is ESM only
-    // https://github.com/remarkjs/remark-gfm#install
-    rehypePlugins: [rehypeExternalLinks],
+    // Use string specifiers so options are JSON-serializable.
+    rehypePlugins: [["rehype-external-links", {}]],
     remarkPlugins: [
-      remarkGfm,
-      remarkFrontmatter,
-      [remarkEmbedder, { transformers: [oembedTransformer] }],
+      "remark-gfm",
+      "remark-frontmatter",
+      ["@remark-embedder/core", { transformers: ["@remark-embedder/transformer-oembed"] }],
     ],
-    // If you use `MDXProvider`, uncomment the following line.
     providerImportSource: "@mdx-js/react",
   },
 });

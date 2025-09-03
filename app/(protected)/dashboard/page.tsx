@@ -2,50 +2,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  Input,
-  Textarea,
-  Button,
-  Chip,
-  Divider,
-  Select,
-  SelectItem,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "@heroui/react";
+import { Input, Button, Chip, Divider } from "@heroui/react";
 import { motion } from "framer-motion";
-import { fetchPrices, type Price } from "../../../helpers/prices";
-import WinrateDonut from "../../../components/dashboard/WinrateDonut";
-import Heatmap from "../../../components/dashboard/Heatmap";
-import MarketInsights from "../../../components/dashboard/MarketInsights";
-import ReviewForm from "../../../components/forms/ReviewForm";
+import { containerVariants, itemVariants } from "@/components/dashboard/animations";
+import { fetchPrices, type Price } from "@/helpers/prices";
+import WinrateDonut from "@/components/dashboard/WinrateDonut";
+import Heatmap from "@/components/dashboard/Heatmap";
+import MarketInsights from "@/components/dashboard/MarketInsights";
+import Metric from "@/components/dashboard/Metric";
+import EquitySpark from "@/components/dashboard/EquitySpark";
+import WinrateTrend from "@/components/dashboard/WinrateTrend";
+import { computeR } from "@/utils/trades";
+import type { Trade } from "@/types/trade";
 
-type Tp = { price: number; sizePct: number };
-type Execution = {
-  avgEntry?: number;
-  avgExit?: number;
-  realizedR?: number;
-  stuckToPlan?: boolean;
-  notes?: string;
-};
-type Trade = {
-  id: string;
-  date: string; // ISO date
-  pair: string;
-  direction: "long" | "short";
-  plannedEntry: number;
-  plannedStop: number; // invalidation
-  plannedSizePct: number; // 0-100 of account risked or size applied (user-defined)
-  plannedTPs: Tp[];
-  plannedNotes?: string;
-  status: "planned" | "executed";
-  exec?: Execution;
-};
-
-export default function ProtectedHome() {
+export default function DashboardPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   useEffect(() => {
@@ -56,20 +26,6 @@ export default function ProtectedHome() {
 
   // Local state (no persistence yet)
   const [trades, setTrades] = useState<Trade[]>([]);
-  const [plan, setPlanState] = useState<Trade>({
-    id: crypto.randomUUID?.() ?? String(Math.random()),
-    date: new Date().toISOString().slice(0, 10),
-    pair: "BTCUSDT",
-    direction: "long",
-    plannedEntry: 0,
-    plannedStop: 0,
-    plannedSizePct: 100,
-    plannedTPs: [
-      { price: 0, sizePct: 50 },
-      { price: 0, sizePct: 50 },
-    ],
-    status: "planned",
-  });
 
   const [stats, setStats] = useState<Record<string, number>>({});
   const [timeframe, setTimeframe] = useState<
@@ -91,24 +47,9 @@ export default function ProtectedHome() {
   const [favLoading, setFavLoading] = useState(false);
   const todayKey = new Date().toISOString().slice(0, 10);
 
-  // Animation variants for staggering
-  const containerVariants = {
-    hidden: { opacity: 0, y: 8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { staggerChildren: 0.07, delayChildren: 0.05 },
-    },
-  } as const;
-  const itemVariants = {
-    hidden: { opacity: 0, y: 8 },
-    visible: { opacity: 1, y: 0 },
-  } as const;
+  // Animation variants imported from components/dashboard/animations
 
-  // Workflow modals
-  const [openPlan, setOpenPlan] = useState(false);
-  const [openReview, setOpenReview] = useState(false);
-  const [reviewSelection, setReviewSelection] = useState<string | null>(null);
+  // Removed plan/review modal state
 
   const metrics = useMemo(() => {
     const executed = trades.filter((t) => t.status === "executed");
@@ -314,32 +255,7 @@ export default function ProtectedHome() {
     };
   }, [favorites]);
 
-  const addPlan = () => {
-    setTrades((prev) => [
-      { ...plan, id: crypto.randomUUID?.() ?? String(Math.random()) },
-      ...prev,
-    ]);
-    setPlanState({
-      id: crypto.randomUUID?.() ?? String(Math.random()),
-      date: new Date().toISOString().slice(0, 10),
-      pair: "BTCUSDT",
-      direction: "long",
-      plannedEntry: 0,
-      plannedStop: 0,
-      plannedSizePct: 100,
-      plannedTPs: [
-        { price: 0, sizePct: 50 },
-        { price: 0, sizePct: 50 },
-      ],
-      status: "planned",
-    });
-  };
-
-  const markExecuted = (id: string, exec: Execution) => {
-    setTrades((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, status: "executed", exec } : t)),
-    );
-  };
+  // Removed planning/review helpers
 
   if (status === "loading") {
     return (
@@ -361,56 +277,8 @@ export default function ProtectedHome() {
               Welcome back, {user}. Visualize progress and keep consistent.
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button
-              color="secondary"
-              variant="flat"
-              onPress={() => setOpenPlan(true)}
-            >
-              Plan Trade
-            </Button>
-            <Button color="primary" onPress={() => setOpenReview(true)}>
-              Review Trade
-            </Button>
-          </div>
+          {/* Removed Plan/Review buttons */}
         </header>
-
-        {/* Quick Journal prompt (minimal, prominent) */}
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="mb-8 md:mb-10 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur p-4"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="flex items-center gap-3"
-          >
-            <Textarea
-              minRows={1}
-              placeholder="Today’s key takeaway…"
-              className="flex-1"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                  setStats((s) => ({
-                    ...s,
-                    [todayKey]: (s[todayKey] ?? 0) + 1,
-                  }));
-                  (e.currentTarget as HTMLTextAreaElement).value = "";
-                }
-              }}
-            />
-            <Button
-              size="sm"
-              color="primary"
-              onPress={() =>
-                setStats((s) => ({ ...s, [todayKey]: (s[todayKey] ?? 0) + 1 }))
-              }
-            >
-              Log
-            </Button>
-          </motion.div>
-        </motion.section>
 
         {/* Overview strip */}
         <motion.section
@@ -602,221 +470,6 @@ export default function ProtectedHome() {
           </motion.div>
         </motion.section>
 
-        {/* Plan modal */}
-        <Modal isOpen={openPlan} onOpenChange={setOpenPlan}>
-          <ModalContent>
-            <ModalHeader>Plan a Trade</ModalHeader>
-            <ModalBody>
-              <div className="grid grid-cols-2 gap-3">
-                <Input
-                  label="Date"
-                  type="date"
-                  value={plan.date}
-                  onValueChange={(v) =>
-                    setPlanState((t) => ({ ...t, date: v }))
-                  }
-                />
-                <Input
-                  label="Pair"
-                  value={plan.pair}
-                  onValueChange={(v) =>
-                    setPlanState((t) => ({ ...t, pair: v.toUpperCase() }))
-                  }
-                />
-                <Select
-                  label="Direction"
-                  selectedKeys={new Set([plan.direction])}
-                  onSelectionChange={(k) =>
-                    setPlanState((t) => ({
-                      ...t,
-                      direction: Array.from(k as Set<string>)[0] as
-                        | "long"
-                        | "short",
-                    }))
-                  }
-                >
-                  <SelectItem key="long">Long</SelectItem>
-                  <SelectItem key="short">Short</SelectItem>
-                </Select>
-                <Input
-                  label="Planned entry"
-                  type="number"
-                  value={String(plan.plannedEntry)}
-                  onValueChange={(v) =>
-                    setPlanState((t) => ({
-                      ...t,
-                      plannedEntry: parseFloat(v || "0"),
-                    }))
-                  }
-                />
-                <Input
-                  label="Invalidation (stop)"
-                  type="number"
-                  value={String(plan.plannedStop)}
-                  onValueChange={(v) =>
-                    setPlanState((t) => ({
-                      ...t,
-                      plannedStop: parseFloat(v || "0"),
-                    }))
-                  }
-                />
-                <Input
-                  label="Size (%)"
-                  type="number"
-                  value={String(plan.plannedSizePct)}
-                  onValueChange={(v) =>
-                    setPlanState((t) => ({
-                      ...t,
-                      plannedSizePct: parseFloat(v || "0"),
-                    }))
-                  }
-                />
-                <div className="col-span-2">
-                  <p className="text-xs text-default-500 mb-1">
-                    Partial take profits
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {plan.plannedTPs.map((tp, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Input
-                          label={`TP${idx + 1} price`}
-                          type="number"
-                          value={String(tp.price)}
-                          onValueChange={(v) =>
-                            setPlanState((t) => ({
-                              ...t,
-                              plannedTPs: t.plannedTPs.map((p, i) =>
-                                i === idx
-                                  ? { ...p, price: parseFloat(v || "0") }
-                                  : p,
-                              ),
-                            }))
-                          }
-                        />
-                        <Input
-                          label="Size %"
-                          type="number"
-                          value={String(tp.sizePct)}
-                          onValueChange={(v) =>
-                            setPlanState((t) => ({
-                              ...t,
-                              plannedTPs: t.plannedTPs.map((p, i) =>
-                                i === idx
-                                  ? { ...p, sizePct: parseFloat(v || "0") }
-                                  : p,
-                              ),
-                            }))
-                          }
-                        />
-                        <Button
-                          size="sm"
-                          variant="light"
-                          onPress={() =>
-                            setPlanState((t) => ({
-                              ...t,
-                              plannedTPs: t.plannedTPs.filter(
-                                (_, i) => i !== idx,
-                              ),
-                            }))
-                          }
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-2">
-                    <Button
-                      size="sm"
-                      variant="flat"
-                      onPress={() =>
-                        setPlanState((t) => ({
-                          ...t,
-                          plannedTPs: [
-                            ...t.plannedTPs,
-                            { price: 0, sizePct: 0 },
-                          ],
-                        }))
-                      }
-                    >
-                      Add TP
-                    </Button>
-                  </div>
-                </div>
-                <Textarea
-                  label="Plan notes"
-                  className="col-span-2"
-                  minRows={2}
-                  value={plan.plannedNotes ?? ""}
-                  onValueChange={(v) =>
-                    setPlanState((t) => ({ ...t, plannedNotes: v }))
-                  }
-                />
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button variant="light" onPress={() => setOpenPlan(false)}>
-                Cancel
-              </Button>
-              <Button
-                color="primary"
-                onPress={() => {
-                  addPlan();
-                  setOpenPlan(false);
-                }}
-              >
-                Save Plan
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
-        {/* Review modal */}
-        <Modal isOpen={openReview} onOpenChange={setOpenReview}>
-          <ModalContent>
-            <ModalHeader>Review Executed Trade</ModalHeader>
-            <ModalBody>
-              <Select
-                label="Select planned trade"
-                selectedKeys={
-                  reviewSelection ? new Set([reviewSelection]) : new Set()
-                }
-                onSelectionChange={(k) =>
-                  setReviewSelection(Array.from(k as Set<string>)[0] ?? null)
-                }
-              >
-                {trades
-                  .filter((t) => t.status === "planned")
-                  .map((t) => (
-                    <SelectItem key={t.id}>
-                      {t.pair} • {t.direction.toUpperCase()} • {t.date}
-                    </SelectItem>
-                  ))}
-              </Select>
-              {reviewSelection && (
-                <ReviewForm
-                  trade={trades.find((t) => t.id === reviewSelection)!}
-                  onSubmit={(exec) => {
-                    markExecuted(reviewSelection, exec);
-                    setOpenReview(false);
-                  }}
-                />
-              )}
-              {!reviewSelection &&
-                trades.filter((t) => t.status === "planned").length === 0 && (
-                  <div className="text-sm text-default-500">
-                    No planned trades to review.
-                  </div>
-                )}
-            </ModalBody>
-            <ModalFooter>
-              <Button variant="light" onPress={() => setOpenReview(false)}>
-                Close
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -959,16 +612,7 @@ export default function ProtectedHome() {
                             .join(", ") || "—"}
                         </div>
                       </div>
-                      <Button
-                        size="sm"
-                        variant="flat"
-                        onPress={() => {
-                          setOpenReview(true);
-                          setReviewSelection(t.id);
-                        }}
-                      >
-                        Review
-                      </Button>
+                      {/* Review action removed */}
                     </div>
                   ))}
                 {trades.filter((t) => t.status === "planned").length === 0 && (
@@ -1059,146 +703,5 @@ export default function ProtectedHome() {
         </section>
       </main>
     </div>
-  );
-}
-
-function Metric({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone?: "pos" | "neg" | "muted";
-}) {
-  const color =
-    tone === "pos"
-      ? "text-emerald-500"
-      : tone === "neg"
-        ? "text-rose-500"
-        : "text-default-600";
-  return (
-    <motion.div
-      variants={{ hidden: { opacity: 0, y: 6 }, visible: { opacity: 1, y: 0 } }}
-    >
-      <p className="text-xs text-default-500">{label}</p>
-      <p className={`text-lg font-semibold ${color}`}>{value}</p>
-    </motion.div>
-  );
-}
-
-function EquitySpark({ points }: { points: { x: number; y: number }[] }) {
-  const w = 280,
-    h = 80,
-    pad = 6;
-  if (points.length === 0)
-    return (
-      <div className="h-20 text-default-400 text-xs">
-        Log trades to see equity.
-      </div>
-    );
-  const xs = points.map((p) => p.x);
-  const ys = points.map((p) => p.y);
-  const minX = Math.min(...xs),
-    maxX = Math.max(...xs);
-  const minY = Math.min(...ys),
-    maxY = Math.max(...ys);
-  const sx = (x: number) =>
-    pad + ((x - minX) / Math.max(1, maxX - minX)) * (w - pad * 2);
-  const sy = (y: number) =>
-    h - (pad + ((y - minY) / Math.max(1, maxY - minY)) * (h - pad * 2));
-  const d = points
-    .map((p, i) => `${i === 0 ? "M" : "L"}${sx(p.x)},${sy(p.y)}`)
-    .join(" ");
-  return (
-    <svg width={w} height={h} className="block">
-      <motion.path
-        d={d}
-        fill="none"
-        stroke="currentColor"
-        className="text-secondary"
-        strokeWidth="2"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1.1, ease: "easeInOut" }}
-      />
-    </svg>
-  );
-}
-
-function computeR(t: Trade): number | undefined {
-  // If user set realizedR, prefer it
-  if (t.exec?.realizedR !== undefined)
-    return Number(t.exec.realizedR.toFixed?.(2) ?? t.exec.realizedR);
-  if (!t.exec?.avgExit || !t.plannedEntry || !t.plannedStop) return undefined;
-  const risk = Math.abs(t.plannedEntry - t.plannedStop);
-  if (risk === 0) return undefined;
-  const move =
-    t.direction === "long"
-      ? t.exec.avgExit - t.plannedEntry
-      : t.plannedEntry - t.exec.avgExit;
-  return Number((move / risk).toFixed(2));
-}
-
-function PlanItem({
-  trade,
-  onExecute,
-}: {
-  trade: Trade;
-  onExecute: (id: string, exec: Execution) => void;
-}) {
-  return null;
-}
-
-function WinrateTrend({
-  points,
-}: {
-  points: { x: number; y: number; date?: string }[];
-}) {
-  const w = 560,
-    h = 120,
-    pad = 8;
-  if (!points.length)
-    return (
-      <div className="h-28 text-default-400 text-xs">
-        No executed trades in timeframe.
-      </div>
-    );
-  const xs = points.map((p) => p.x);
-  const ys = points.map((p) => p.y);
-  const minX = Math.min(...xs),
-    maxX = Math.max(...xs);
-  const minY = 0,
-    maxY = 100; // winrate %
-  const sx = (x: number) =>
-    pad + ((x - minX) / Math.max(1, maxX - minX)) * (w - pad * 2);
-  const sy = (y: number) =>
-    h - (pad + ((y - minY) / Math.max(1, maxY - minY)) * (h - pad * 2));
-  const d = points
-    .map((p, i) => `${i === 0 ? "M" : "L"}${sx(p.x)},${sy(p.y)}`)
-    .join(" ");
-  return (
-    <svg width={w} height={h} className="block">
-      <rect x={0} y={0} width={w} height={h} className="fill-transparent" />
-      <motion.path
-        d={d}
-        fill="none"
-        stroke="currentColor"
-        className="text-primary"
-        strokeWidth="2"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-      />
-      {/* 50% baseline */}
-      <line
-        x1={pad}
-        x2={w - pad}
-        y1={sy(50)}
-        y2={sy(50)}
-        className="stroke-current text-default-300"
-        strokeDasharray="4 4"
-      />
-    </svg>
   );
 }
