@@ -7,12 +7,15 @@ export default function SummarySkeleton() {
           <div className="h-3 w-40 rounded bg-slate-200 dark:bg-slate-800" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[0,1,2].map((i) => (
+          {[0, 1, 2].map((i) => (
             <div key={i} className="space-y-2">
               <div className="h-3 w-24 rounded bg-slate-200 dark:bg-slate-800" />
               <div className="flex flex-wrap gap-2">
                 {[...Array(6)].map((_, j) => (
-                  <div key={j} className="h-6 w-16 rounded-full bg-slate-200 dark:bg-slate-800" />
+                  <div
+                    key={j}
+                    className="h-6 w-16 rounded-full bg-slate-200 dark:bg-slate-800"
+                  />
                 ))}
               </div>
             </div>
@@ -22,4 +25,3 @@ export default function SummarySkeleton() {
     </div>
   );
 }
-

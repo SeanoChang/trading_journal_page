@@ -1,9 +1,9 @@
-import type { Price } from '../types/market';
+import type { Price } from "../types/market";
 
 export const findPivot = (prices: Price[], lb: number, ub: number): number => {
   let pivot = parseFloat(prices[ub].market_cap.toString());
   let i = lb - 1;
-  
+
   for (let j = lb; j < ub; j++) {
     if (parseFloat(prices[j].market_cap.toString()) > pivot) {
       i++;
@@ -15,7 +15,11 @@ export const findPivot = (prices: Price[], lb: number, ub: number): number => {
   return i + 1;
 };
 
-export const qSortPrices = (prices: Price[], lb: number, ub: number): Price[] => {
+export const qSortPrices = (
+  prices: Price[],
+  lb: number,
+  ub: number,
+): Price[] => {
   if (lb === ub) return prices;
   if (lb > ub) return [];
 

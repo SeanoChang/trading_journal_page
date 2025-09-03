@@ -23,9 +23,7 @@ export function GreedGauge({ value, classification }: GreedGaugeProps) {
   return (
     <div className={`rounded-lg p-4 ${getBackgroundColor(value)}`}>
       <div className="text-center">
-        <div className={`text-3xl font-bold ${getColor(value)}`}>
-          {value}
-        </div>
+        <div className={`text-3xl font-bold ${getColor(value)}`}>{value}</div>
         <div className="text-sm font-medium text-slate-600 dark:text-slate-300 mt-1">
           {classification}
         </div>
@@ -36,11 +34,15 @@ export function GreedGauge({ value, classification }: GreedGaugeProps) {
       <div className="mt-3 w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
         <div
           className={`h-2 rounded-full transition-all duration-500 ${
-            value <= 20 ? "bg-red-500" :
-            value <= 40 ? "bg-orange-500" :
-            value <= 60 ? "bg-yellow-500" :
-            value <= 80 ? "bg-lime-500" :
-            "bg-green-500"
+            value <= 20
+              ? "bg-red-500"
+              : value <= 40
+                ? "bg-orange-500"
+                : value <= 60
+                  ? "bg-yellow-500"
+                  : value <= 80
+                    ? "bg-lime-500"
+                    : "bg-green-500"
           }`}
           style={{ width: `${value}%` }}
         />

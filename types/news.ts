@@ -18,6 +18,6 @@ export interface NewsFilters {
 
 export interface NewsAnalysis {
   keyWords: string[];
-  sentiment?: 'positive' | 'negative' | 'neutral';
+  sentiment?: "positive" | "negative" | "neutral";
   topics: string[];
 }

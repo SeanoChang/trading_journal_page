@@ -5,10 +5,70 @@ import { Card, CardHeader, CardBody, Chip } from "@heroui/react";
 type News = { title: string; link: string; source: string };
 
 const STOP_WORDS = new Set([
-  "the","a","an","to","of","in","on","for","and","or","is","are","be","as","at","by","with","from","that","this","it","its","will","new","update","after","over","into","amid","about","vs","vs.","as","up","down","out","how","why","what","now","today","week","month"
+  "the",
+  "a",
+  "an",
+  "to",
+  "of",
+  "in",
+  "on",
+  "for",
+  "and",
+  "or",
+  "is",
+  "are",
+  "be",
+  "as",
+  "at",
+  "by",
+  "with",
+  "from",
+  "that",
+  "this",
+  "it",
+  "its",
+  "will",
+  "new",
+  "update",
+  "after",
+  "over",
+  "into",
+  "amid",
+  "about",
+  "vs",
+  "vs.",
+  "as",
+  "up",
+  "down",
+  "out",
+  "how",
+  "why",
+  "what",
+  "now",
+  "today",
+  "week",
+  "month",
 ]);
 
-const TICKERS = ["BTC","ETH","SOL","XRP","ADA","DOGE","AVAX","BNB","USDT","USDC","ARB","OP","LINK","MATIC","TON","DOT","LTC"];
+const TICKERS = [
+  "BTC",
+  "ETH",
+  "SOL",
+  "XRP",
+  "ADA",
+  "DOGE",
+  "AVAX",
+  "BNB",
+  "USDT",
+  "USDC",
+  "ARB",
+  "OP",
+  "LINK",
+  "MATIC",
+  "TON",
+  "DOT",
+  "LTC",
+];
 
 function extractDomain(url: string) {
   try {
@@ -71,34 +131,54 @@ export default function Summary({ news }: { news: News[] }) {
           <span className="text-xl">⚡️</span>
           <h2 className="text-lg md:text-xl font-semibold">What’s Up Now</h2>
         </div>
-        <span className="text-xs text-default-500">Auto‑summarized from latest headlines</span>
+        <span className="text-xs text-default-500">
+          Auto‑summarized from latest headlines
+        </span>
       </CardHeader>
       <CardBody className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <p className="text-xs uppercase tracking-wide text-default-500 mb-2">Top keywords</p>
+          <p className="text-xs uppercase tracking-wide text-default-500 mb-2">
+            Top keywords
+          </p>
           <div className="flex flex-wrap gap-2">
             {keywords.map(([k, v]) => (
-              <Chip key={k} size="sm" variant="flat" color="secondary">{k} • {v}</Chip>
+              <Chip key={k} size="sm" variant="flat" color="secondary">
+                {k} • {v}
+              </Chip>
             ))}
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-default-500 mb-2">Ticker mentions</p>
+          <p className="text-xs uppercase tracking-wide text-default-500 mb-2">
+            Ticker mentions
+          </p>
           <div className="flex flex-wrap gap-2">
-            {mentions.length === 0 && <span className="text-default-500 text-sm">No clear ticker spikes</span>}
+            {mentions.length === 0 && (
+              <span className="text-default-500 text-sm">
+                No clear ticker spikes
+              </span>
+            )}
             {mentions.map(([k, v]) => (
-              <Chip key={k} size="sm" variant="flat" color="primary">{k} • {v}</Chip>
+              <Chip key={k} size="sm" variant="flat" color="primary">
+                {k} • {v}
+              </Chip>
             ))}
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-default-500 mb-2">Sources & domains</p>
+          <p className="text-xs uppercase tracking-wide text-default-500 mb-2">
+            Sources & domains
+          </p>
           <div className="flex flex-wrap gap-2">
             {sources.map(([k, v]) => (
-              <Chip key={k} size="sm" variant="flat" color="success">{k} • {v}</Chip>
+              <Chip key={k} size="sm" variant="flat" color="success">
+                {k} • {v}
+              </Chip>
             ))}
             {domains.map(([k, v]) => (
-              <Chip key={k} size="sm" variant="flat">{k} • {v}</Chip>
+              <Chip key={k} size="sm" variant="flat">
+                {k} • {v}
+              </Chip>
             ))}
           </div>
         </div>
@@ -106,4 +186,3 @@ export default function Summary({ news }: { news: News[] }) {
     </Card>
   );
 }
-

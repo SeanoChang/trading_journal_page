@@ -1,0 +1,22 @@
+# .pretterignore
+# Ignore artifacts:
+build
+coverage
+
+# Ignore all HTML files:
+**/*.html
+
+# Ignore all Markdown files:
+**/*.md
+
+# Ignore all JSON files:
+**/*.json
+
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+
+# Ignore components ui files 
+# (I added this to prevent reloading shadcn-ui components)
+components/ui/**/*.tsx

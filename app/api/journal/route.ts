@@ -28,11 +28,11 @@ export async function GET() {
             pair: true,
             side: true,
             orderStatus: true,
-          }
+          },
         },
       },
       orderBy: {
-        date: 'desc',
+        date: "desc",
       },
     });
 
@@ -40,7 +40,10 @@ export async function GET() {
     return NextResponse.json(entries, { status: 200 });
   } catch (error) {
     console.error("Error fetching journal entries:", error);
-    return NextResponse.json({ error: "Failed to fetch journal entries" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch journal entries" },
+      { status: 500 },
+    );
   }
 }
 
@@ -53,7 +56,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, date, tagNames, tradeIds, mood, confidence, winRate } = body;
+    const {
+      title,
+      content,
+      date,
+      tagNames,
+      tradeIds,
+      mood,
+      confidence,
+      winRate,
+    } = body;
 
     // Create or find tags
     const tags = await Promise.all(
@@ -63,7 +75,7 @@ export async function POST(request: NextRequest) {
           create: { name },
           update: {},
         });
-      })
+      }),
     );
 
     const entry = await prisma.journalEntry.create({
@@ -76,7 +88,7 @@ export async function POST(request: NextRequest) {
         confidence,
         winRate,
         tags: {
-          connect: tags.map(tag => ({ id: tag.id })),
+          connect: tags.map((tag) => ({ id: tag.id })),
         },
         trades: {
           connect: (tradeIds || []).map((id: string) => ({ id })),
@@ -91,7 +103,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(entry);
   } catch (error) {
     console.error("Error creating journal entry:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -104,7 +119,8 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, title, content, date, tagNames, mood, confidence, winRate } = body;
+    const { id, title, content, date, tagNames, mood, confidence, winRate } =
+      body;
 
     // Verify ownership
     const existingEntry = await prisma.journalEntry.findFirst({
@@ -128,12 +144,12 @@ export async function PUT(request: NextRequest) {
             create: { name },
             update: {},
           });
-        })
+        }),
       );
 
       tagOperations = {
         tags: {
-          set: tags.map(tag => ({ id: tag.id })),
+          set: tags.map((tag) => ({ id: tag.id })),
         },
       };
     }
@@ -157,7 +173,10 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json(entry);
   } catch (error) {
     console.error("Error updating journal entry:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -170,7 +189,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const id = searchParams.get("id");
 
     if (!id) {
       return NextResponse.json({ error: "Entry ID required" }, { status: 400 });
@@ -195,7 +214,10 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting journal entry:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 

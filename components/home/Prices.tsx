@@ -6,7 +6,11 @@ import { qSortPrices } from "../../utils/sorting";
 import { PriceItems } from "../prices/PriceItems";
 
 const Prices = (props: { assets: Price[] }) => {
-  const sortedPrices = qSortPrices([...props.assets], 0, props.assets.length - 1);
+  const sortedPrices = qSortPrices(
+    [...props.assets],
+    0,
+    props.assets.length - 1,
+  );
   const prices = sortedPrices;
 
   return (

@@ -10,18 +10,34 @@ export default function WinrateDonut({ value }: { value: number }) {
     <div className="flex flex-col items-center">
       <svg width={size} height={size} className="block">
         <g transform={`translate(${size / 2}, ${size / 2})`}>
-          <circle r={r} fill="none" stroke="currentColor" className="text-slate-200 dark:text-slate-800" strokeWidth={stroke} />
           <circle
             r={r}
             fill="none"
             stroke="currentColor"
-            className={pct >= 50 ? "text-emerald-500" : pct >= 35 ? "text-yellow-500" : "text-rose-500"}
+            className="text-slate-200 dark:text-slate-800"
+            strokeWidth={stroke}
+          />
+          <circle
+            r={r}
+            fill="none"
+            stroke="currentColor"
+            className={
+              pct >= 50
+                ? "text-emerald-500"
+                : pct >= 35
+                  ? "text-yellow-500"
+                  : "text-rose-500"
+            }
             strokeWidth={stroke}
             strokeDasharray={`${dash} ${c - dash}`}
             strokeLinecap="round"
             transform="rotate(-90)"
           />
-          <text textAnchor="middle" dominantBaseline="middle" className="fill-current text-xl font-semibold">
+          <text
+            textAnchor="middle"
+            dominantBaseline="middle"
+            className="fill-current text-xl font-semibold"
+          >
             {pct}%
           </text>
         </g>
@@ -30,4 +46,3 @@ export default function WinrateDonut({ value }: { value: number }) {
     </div>
   );
 }
-

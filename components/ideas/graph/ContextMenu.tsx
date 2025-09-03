@@ -1,7 +1,14 @@
 "use client";
-import { useEffect, useRef } from 'react';
-import { FiEye, FiEyeOff, FiFilter, FiSearch, FiCopy, FiExternalLink } from 'react-icons/fi';
-import type { Node, IdeaNode } from '../../../types/ideas-graph';
+import { useEffect, useRef } from "react";
+import {
+  FiEye,
+  FiEyeOff,
+  FiFilter,
+  FiSearch,
+  FiCopy,
+  FiExternalLink,
+} from "react-icons/fi";
+import type { Node, IdeaNode } from "../../../types/ideas-graph";
 
 interface ContextMenuProps {
   node: Node | null;
@@ -22,29 +29,32 @@ export function ContextMenu({
   onIsolateNode,
   onFilterByType,
   onFindSimilar,
-  onCopyContent
+  onCopyContent,
 }: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Element)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Element)
+      ) {
         onClose();
       }
     };
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [onClose]);
 
@@ -52,25 +62,25 @@ export function ContextMenu({
 
   const menuItems = [];
 
-  if (node.type === 'idea') {
+  if (node.type === "idea") {
     const ideaNode = node as IdeaNode;
-    
+
     menuItems.push({
       icon: <FiEye className="w-4 h-4" />,
-      label: 'Isolate neighborhood',
+      label: "Isolate neighborhood",
       onClick: () => {
         onIsolateNode?.(node.id);
         onClose();
-      }
+      },
     });
 
     menuItems.push({
       icon: <FiEyeOff className="w-4 h-4" />,
-      label: 'Hide this node',
+      label: "Hide this node",
       onClick: () => {
         onHideNode?.(node.id);
         onClose();
-      }
+      },
     });
 
     menuItems.push({
@@ -79,7 +89,7 @@ export function ContextMenu({
       onClick: () => {
         onFilterByType?.(ideaNode.topic);
         onClose();
-      }
+      },
     });
 
     if (ideaNode.tickers && ideaNode.tickers.length > 0) {
@@ -89,55 +99,55 @@ export function ContextMenu({
         onClick: () => {
           onFilterByType?.(`ticker:${ideaNode.tickers![0]}`);
           onClose();
-        }
+        },
       });
     }
 
     menuItems.push({
       icon: <FiSearch className="w-4 h-4" />,
-      label: 'Find similar ideas',
+      label: "Find similar ideas",
       onClick: () => {
         onFindSimilar?.(node.id);
         onClose();
-      }
+      },
     });
 
     menuItems.push({
       icon: <FiCopy className="w-4 h-4" />,
-      label: 'Copy title',
+      label: "Copy title",
       onClick: () => {
         onCopyContent?.(ideaNode.title);
         onClose();
-      }
+      },
     });
 
     if (ideaNode.content) {
       menuItems.push({
         icon: <FiCopy className="w-4 h-4" />,
-        label: 'Copy content',
+        label: "Copy content",
         onClick: () => {
-          onCopyContent?.(ideaNode.content || '');
+          onCopyContent?.(ideaNode.content || "");
           onClose();
-        }
+        },
       });
     }
-  } else if (node.type === 'tag') {
+  } else if (node.type === "tag") {
     menuItems.push({
       icon: <FiFilter className="w-4 h-4" />,
       label: `Filter by tag: ${node.name}`,
       onClick: () => {
         onFilterByType?.(node.name);
         onClose();
-      }
+      },
     });
 
     menuItems.push({
       icon: <FiEyeOff className="w-4 h-4" />,
-      label: 'Hide this tag',
+      label: "Hide this tag",
       onClick: () => {
         onHideNode?.(node.id);
         onClose();
-      }
+      },
     });
   }
 
@@ -148,18 +158,18 @@ export function ContextMenu({
       style={{
         left: position.x,
         top: position.y,
-        transform: 'translate(-50%, 0)'
+        transform: "translate(-50%, 0)",
       }}
     >
       <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-700">
         <div className="font-medium text-sm truncate">
-          {node.type === 'idea' ? node.title : node.name}
+          {node.type === "idea" ? node.title : node.name}
         </div>
         <div className="text-xs text-slate-500 dark:text-slate-400">
-          {node.type === 'idea' ? `${node.topic} idea` : 'Tag'}
+          {node.type === "idea" ? `${node.topic} idea` : "Tag"}
         </div>
       </div>
-      
+
       <div className="py-1">
         {menuItems.map((item, index) => (
           <button

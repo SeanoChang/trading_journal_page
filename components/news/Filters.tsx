@@ -3,7 +3,13 @@ import { Tabs, Tab } from "@heroui/react";
 
 type FilterKey = "all" | "bitcoin" | "ethereum" | "alts";
 
-export default function Filters({ value, onChange }: { value: FilterKey; onChange: (v: FilterKey) => void }) {
+export default function Filters({
+  value,
+  onChange,
+}: {
+  value: FilterKey;
+  onChange: (v: FilterKey) => void;
+}) {
   return (
     <div className="w-full flex items-center justify-between">
       <Tabs
@@ -26,4 +32,3 @@ export default function Filters({ value, onChange }: { value: FilterKey; onChang
     </div>
   );
 }
-

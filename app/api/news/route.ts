@@ -5,23 +5,25 @@ import type { AnyNode } from "domhandler";
 import isValidUrl from "../../../helpers/validUrl";
 import { newsSources, type NewsSource } from "../../../data/newsSources";
 import type { News } from "../../../types/news";
-import { 
-  fetchArticleDetails, 
-  pickListingImage, 
-  parseAnchorWithCoverAndContent 
+import {
+  fetchArticleDetails,
+  pickListingImage,
+  parseAnchorWithCoverAndContent,
 } from "../../../scrapers/baseScraper";
 import { parseCoinDeskItem } from "../../../scrapers/coinDeskScraper";
 
 const getSpecificPath = async (
   source: NewsSource,
   path: string,
-  pieces: number
+  pieces: number,
 ) => {
   let url = `${source.url}${path}`;
   let newsLists: News[] = [];
   let piecesOfNews = source.name === "CryptoSlate" ? pieces * 2 : pieces;
   try {
-    const response = await axios.get(url, { headers: { "Accept-Encoding": "gzip,deflate,compress" } });
+    const response = await axios.get(url, {
+      headers: { "Accept-Encoding": "gzip,deflate,compress" },
+    });
     const $ = load(response.data);
     const items = $(source.selector).toArray().slice(0, piecesOfNews);
     for (const item of items) {
@@ -33,9 +35,9 @@ const getSpecificPath = async (
       } else if (source.linkSelector) {
         $a = $item.find(source.linkSelector).first();
       } else {
-        $a = $item.find('a[href]').first();
+        $a = $item.find("a[href]").first();
       }
-      const rawHref = ($a && $a.attr('href')) || undefined;
+      const rawHref = ($a && $a.attr("href")) || undefined;
       if (!rawHref) continue;
       const link = isValidUrl(rawHref) ? rawHref : `${source.url}${rawHref}`;
       // Prefer configured cover/content parsing when available
@@ -44,21 +46,31 @@ const getSpecificPath = async (
       let publishedAt: number | undefined;
       let author: string | undefined;
       if (source.coverSelector || source.contentSelector) {
-        const res = parseAnchorWithCoverAndContent($, $a, link, source.coverSelector, source.contentSelector);
+        const res = parseAnchorWithCoverAndContent(
+          $,
+          $a,
+          link,
+          source.coverSelector,
+          source.contentSelector,
+        );
         title = res.title;
         image = res.image;
         publishedAt = res.publishedAt;
         author = res.author;
-      } else if (source.name === 'CoinDesk') {
+      } else if (source.name === "CoinDesk") {
         const res = parseCoinDeskItem($, $item, $a, link);
         title = res.title;
         image = res.image;
         publishedAt = res.publishedAt;
       } else {
         // Generic: Title prefer anchor text, fallback to item text
-        title = ($a.text() || $item.text() || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+        title = ($a.text() || $item.text() || "")
+          .replace(/<[^>]*>/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
         image = pickListingImage($, item, link);
-        const timeStrGeneric = $item.find('time[datetime]').attr('datetime') || undefined;
+        const timeStrGeneric =
+          $item.find("time[datetime]").attr("datetime") || undefined;
         publishedAt = timeStrGeneric ? Date.parse(timeStrGeneric) : undefined;
       }
       // Only use generic listing image when we don't have cover/content guidance
@@ -69,11 +81,19 @@ const getSpecificPath = async (
       if ((!image || !publishedAt) && link) {
         const details = await fetchArticleDetails(link);
         if (!image && details.image) image = details.image;
-        if (!publishedAt && details.publishedAt) publishedAt = details.publishedAt;
+        if (!publishedAt && details.publishedAt)
+          publishedAt = details.publishedAt;
       }
 
       if (!title) continue;
-      newsLists.push({ title, link, source: source.name, image, publishedAt, author });
+      newsLists.push({
+        title,
+        link,
+        source: source.name,
+        image,
+        publishedAt,
+        author,
+      });
     }
   } catch (error) {
     console.log(error);
@@ -88,10 +108,10 @@ const getNews = async (pieces: number) => {
     await Promise.all(
       newsSources.map(async (source) => {
         const lists = await Promise.all(
-          source.paths.map((p) => getSpecificPath(source, p, pieces))
+          source.paths.map((p) => getSpecificPath(source, p, pieces)),
         );
         for (const l of lists) newsLists.push(...l);
-      })
+      }),
     );
   } catch (ex) {
     console.log(ex);

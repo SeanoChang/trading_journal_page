@@ -1,12 +1,13 @@
 "use client";
 import { useState, useRef } from "react";
-import type { Idea, LinkMode } from '../../types/ideas-graph';
-import { useGraphData, useGraphInteraction, useDimensions } from '../../hooks/ideas-graph';
-import { 
-  GraphControlPanel, 
-  GraphCanvas 
-} from './graph';
-import { ContextMenu } from './graph/ContextMenu';
+import type { Idea, LinkMode } from "../../types/ideas-graph";
+import {
+  useGraphData,
+  useGraphInteraction,
+  useDimensions,
+} from "../../hooks/ideas-graph";
+import { GraphControlPanel, GraphCanvas } from "./graph";
+import { ContextMenu } from "./graph/ContextMenu";
 
 export default function IdeasGraph({ ideas }: { ideas: Idea[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,17 +28,17 @@ export default function IdeasGraph({ ideas }: { ideas: Idea[] }) {
   const dimensions = useDimensions(containerRef);
   const graphData = useGraphData(ideas, showTags);
   const { findNodeAtPosition, getConnectedNodes } = useGraphInteraction(
-    graphData.nodes, 
-    graphData.links, 
-    dimensions
+    graphData.nodes,
+    graphData.links,
+    dimensions,
   );
 
   // Handlers
   const handleTickerFilter = (ticker: string) => {
-    setSelectedTickers(prev => 
-      prev.includes(ticker) 
-        ? prev.filter(t => t !== ticker)
-        : [...prev, ticker]
+    setSelectedTickers((prev) =>
+      prev.includes(ticker)
+        ? prev.filter((t) => t !== ticker)
+        : [...prev, ticker],
     );
   };
 
@@ -50,8 +51,8 @@ export default function IdeasGraph({ ideas }: { ideas: Idea[] }) {
   };
 
   const handleFilterByType = (type: string) => {
-    if (type.startsWith('ticker:')) {
-      const ticker = type.replace('ticker:', '');
+    if (type.startsWith("ticker:")) {
+      const ticker = type.replace("ticker:", "");
       handleTickerFilter(ticker);
     } else {
       setSearch(type);
@@ -59,7 +60,7 @@ export default function IdeasGraph({ ideas }: { ideas: Idea[] }) {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative overflow-hidden bg-slate-50 dark:bg-slate-900 w-full h-screen"
     >
@@ -74,7 +75,7 @@ export default function IdeasGraph({ ideas }: { ideas: Idea[] }) {
         findNodeAtPosition={findNodeAtPosition}
         getConnectedNodes={getConnectedNodes}
       />
-      
+
       <GraphControlPanel
         search={search}
         onSearchChange={setSearch}
@@ -89,7 +90,7 @@ export default function IdeasGraph({ ideas }: { ideas: Idea[] }) {
         selectedTickers={selectedTickers}
         onTickerFilter={handleTickerFilter}
       />
-      
+
       <ContextMenu
         node={contextMenu?.node}
         position={contextMenu?.position || null}

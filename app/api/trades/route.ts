@@ -15,10 +15,7 @@ export async function GET() {
       where: {
         userId: session.user.id,
       },
-      orderBy: [
-        { createdAt: 'desc' },
-        { pair: 'asc' }
-      ],
+      orderBy: [{ createdAt: "desc" }, { pair: "asc" }],
       select: {
         id: true,
         pair: true,
@@ -35,6 +32,9 @@ export async function GET() {
     return NextResponse.json(trades, { status: 200 });
   } catch (error) {
     console.error("Error fetching trades:", error);
-    return NextResponse.json({ error: "Failed to fetch trades" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch trades" },
+      { status: 500 },
+    );
   }
 }

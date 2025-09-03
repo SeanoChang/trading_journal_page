@@ -11,7 +11,9 @@ const newsPieces = 10;
 export default function NewsPage() {
   const [news, setNews] = useState<any[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
-  const [filter, setFilter] = useState<"all" | "bitcoin" | "ethereum" | "alts">("all");
+  const [filter, setFilter] = useState<"all" | "bitcoin" | "ethereum" | "alts">(
+    "all",
+  );
 
   useEffect(() => {
     setNewsLoading(true);
@@ -50,9 +52,14 @@ export default function NewsPage() {
   );
 }
 
-function applyFilter(list: any[], filter: "all" | "bitcoin" | "ethereum" | "alts") {
+function applyFilter(
+  list: any[],
+  filter: "all" | "bitcoin" | "ethereum" | "alts",
+) {
   if (filter === "all") {
-    return [...list].sort((a, b) => (b.publishedAt ?? 0) - (a.publishedAt ?? 0));
+    return [...list].sort(
+      (a, b) => (b.publishedAt ?? 0) - (a.publishedAt ?? 0),
+    );
   }
   const isBTC = (t: string) => /(\bbitcoin\b|\bbtc\b)/i.test(t);
   const isETH = (t: string) => /(\bethereum\b|\beth\b)/i.test(t);

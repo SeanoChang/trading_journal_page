@@ -28,7 +28,7 @@ const formatRelative = (ts?: number) => {
   const now = Date.now();
   const diff = Math.max(0, now - ts);
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return 'just now';
+  if (minutes < 1) return "just now";
   if (minutes < 60) return `${minutes}m ago`;
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours}h ago`;
@@ -43,17 +43,29 @@ const NewsItem = ({ news }: { news: News }) => {
   const img = news.image;
   const rel = formatRelative(news.publishedAt);
   return (
-    <a href={news.link} target="_blank" rel="noreferrer" className="group block">
+    <a
+      href={news.link}
+      target="_blank"
+      rel="noreferrer"
+      className="group block"
+    >
       <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl bg-white/40 dark:bg-slate-900/30">
         {img ? (
-          <Image src={img} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+          <Image
+            src={img}
+            alt={news.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-700 dark:to-slate-800" />
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="pointer-events-none absolute left-3 right-3 bottom-3 flex items-center gap-2 text-[11px] text-white/80">
           <HiOutlineNewspaper />
-          <span className="px-1.5 py-0.5 rounded bg-white/20 backdrop-blur">{news.source}</span>
+          <span className="px-1.5 py-0.5 rounded bg-white/20 backdrop-blur">
+            {news.source}
+          </span>
           {news.author && <span className="truncate">• {news.author}</span>}
           {rel && <span className="ml-auto">{rel}</span>}
         </div>
@@ -83,7 +95,10 @@ const News = (props: { newsList: News[]; showMoreLink?: boolean }) => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full py-16" id="news">
+    <div
+      className="flex flex-col justify-center items-center w-full py-16"
+      id="news"
+    >
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         {newsComponents}
       </div>
@@ -94,7 +109,9 @@ const News = (props: { newsList: News[]; showMoreLink?: boolean }) => {
         </div>
       ) : (
         props.showMoreLink !== false && (
-          <div className="h-20 text-xl">No more, just google crypto news &#128528;</div>
+          <div className="h-20 text-xl">
+            No more, just google crypto news &#128528;
+          </div>
         )
       )}
     </div>

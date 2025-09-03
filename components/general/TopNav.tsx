@@ -1,5 +1,17 @@
 "use client";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link, Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Button,
+  Link,
+  Avatar,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import AnimatedText from "../general/AnimatedText";
 
@@ -11,7 +23,10 @@ export default function TopNav() {
     <Navbar maxWidth="xl" isBordered className="backdrop-blur bg-background/70">
       <NavbarBrand>
         <Link href="/" className="flex items-center gap-2">
-          <AnimatedText text="Seano’s Trading" className="text-base md:text-lg font-semibold" />
+          <AnimatedText
+            text="Seano’s Trading"
+            className="text-base md:text-lg font-semibold"
+          />
         </Link>
       </NavbarBrand>
       <NavbarContent justify="end">
@@ -27,7 +42,11 @@ export default function TopNav() {
         </NavbarItem>
         {!authed && (
           <NavbarItem>
-            <Button color="primary" size="sm" onPress={() => signIn(undefined, { callbackUrl: "/protected" })}>
+            <Button
+              color="primary"
+              size="sm"
+              onPress={() => signIn(undefined, { callbackUrl: "/protected" })}
+            >
               <AnimatedText text="Sign in" />
             </Button>
           </NavbarItem>
@@ -45,16 +64,32 @@ export default function TopNav() {
                 />
               </DropdownTrigger>
               <DropdownMenu aria-label="User menu" variant="flat">
-                <DropdownItem key="profile" className="h-12" textValue="profile">
+                <DropdownItem
+                  key="profile"
+                  className="h-12"
+                  textValue="profile"
+                >
                   <div className="flex flex-col">
                     <span className="text-small">Signed in as</span>
-                    <span className="text-small font-semibold">{user?.email || user?.name}</span>
+                    <span className="text-small font-semibold">
+                      {user?.email || user?.name}
+                    </span>
                   </div>
                 </DropdownItem>
-                <DropdownItem key="dashboard" as={Link} href="/protected" textValue="dashboard">
+                <DropdownItem
+                  key="dashboard"
+                  as={Link}
+                  href="/protected"
+                  textValue="dashboard"
+                >
                   Dashboard
                 </DropdownItem>
-                <DropdownItem key="signout" color="danger" onPress={() => signOut({ callbackUrl: "/" })} textValue="signout">
+                <DropdownItem
+                  key="signout"
+                  color="danger"
+                  onPress={() => signOut({ callbackUrl: "/" })}
+                  textValue="signout"
+                >
                   Sign out
                 </DropdownItem>
               </DropdownMenu>

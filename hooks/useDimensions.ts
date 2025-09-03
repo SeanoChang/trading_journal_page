@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 export interface UseDimensionsOptions {
   defaultWidth?: number;
@@ -15,9 +15,9 @@ export const useDimensions = ({
   defaultHeight = 600,
 }: UseDimensionsOptions = {}): DimensionsHook => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ 
-    width: defaultWidth, 
-    height: defaultHeight 
+  const [dimensions, setDimensions] = useState({
+    width: defaultWidth,
+    height: defaultHeight,
   });
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export const useDimensions = ({
     };
 
     updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    
-    return () => window.removeEventListener('resize', updateDimensions);
+    window.addEventListener("resize", updateDimensions);
+
+    return () => window.removeEventListener("resize", updateDimensions);
   }, [defaultWidth, defaultHeight]);
 
   return {

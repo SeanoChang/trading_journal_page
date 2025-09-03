@@ -12,7 +12,10 @@ const TradingIdeas = (props: { tradingPairs: string[] }) => {
             <div className="rounded-full m-1 mr-2 h-10 w-10 flex items-center justify-center bg-slate-300 dark:bg-slate-600 text-slate-800 dark:text-slate-100">
               {symbol.slice(0, 3).toUpperCase()}
             </div>
-            <a href={`/protected/ideas_home/${pair}`} className="hover:underline">
+            <a
+              href={`/protected/ideas_home/${pair}`}
+              className="hover:underline"
+            >
               {symbol.toUpperCase()}
             </a>
           </span>

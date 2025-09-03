@@ -17,7 +17,10 @@ export default function AnimatedText({
   step = 0.015,
   as: Tag = "span",
 }: Props) {
-  const chars = React.useMemo(() => text.split("").map((c) => (c === " " ? "\u00A0" : c)), [text]);
+  const chars = React.useMemo(
+    () => text.split("").map((c) => (c === " " ? "\u00A0" : c)),
+    [text],
+  );
   return (
     <Tag className={className}>
       {chars.map((c, i) => (
@@ -25,7 +28,11 @@ export default function AnimatedText({
           key={`${c}-${i}`}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: delay + i * step, duration: 0.25, ease: "easeOut" }}
+          transition={{
+            delay: delay + i * step,
+            duration: 0.25,
+            ease: "easeOut",
+          }}
           style={{ display: "inline-block" }}
         >
           {c}
@@ -34,4 +41,3 @@ export default function AnimatedText({
     </Tag>
   );
 }
-

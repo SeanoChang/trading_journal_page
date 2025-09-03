@@ -1,4 +1,7 @@
-export const absolutize = (maybeUrl: string | undefined, base: string): string | undefined => {
+export const absolutize = (
+  maybeUrl: string | undefined,
+  base: string,
+): string | undefined => {
   if (!maybeUrl) return undefined;
   try {
     if (maybeUrl.startsWith("//")) return `https:${maybeUrl}`;

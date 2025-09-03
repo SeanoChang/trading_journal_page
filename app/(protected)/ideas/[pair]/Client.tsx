@@ -2,12 +2,21 @@
 import NavBar from "../../../../components/home/protected/pair/Navbar";
 import Footer from "../../../../components/general/Footer";
 
-export default function PairHomeClient({ pair, posts }: { pair: string; posts: string[] }) {
+export default function PairHomeClient({
+  pair,
+  posts,
+}: {
+  pair: string;
+  posts: string[];
+}) {
   const postItems = posts.map((post) => {
     const name = post.replace(".mdx", "");
     return (
       <li key={name} className="text-slate-800 dark:text-slate-100">
-        <a href={`/protected/ideas_home/${pair}/${name}`} className="text-sm md:text-base lg:text-lg hover:underline ">
+        <a
+          href={`/protected/ideas_home/${pair}/${name}`}
+          className="text-sm md:text-base lg:text-lg hover:underline "
+        >
           {name}
         </a>
       </li>
@@ -40,4 +49,3 @@ export default function PairHomeClient({ pair, posts }: { pair: string; posts: s
     </div>
   );
 }
-

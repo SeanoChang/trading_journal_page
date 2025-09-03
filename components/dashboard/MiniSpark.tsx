@@ -7,11 +7,11 @@ interface MiniSparkProps {
   color?: string;
 }
 
-export function MiniSpark({ 
-  data, 
-  width = 80, 
-  height = 20, 
-  color = "currentColor" 
+export function MiniSpark({
+  data,
+  width = 80,
+  height = 20,
+  color = "currentColor",
 }: MiniSparkProps) {
   const pathData = useMemo(() => {
     if (data.length < 2) return "";
@@ -26,7 +26,7 @@ export function MiniSpark({
     }
 
     const stepX = width / (data.length - 1);
-    
+
     const points = data.map((value, index) => {
       const x = index * stepX;
       const y = height - ((value - min) / range) * height;
@@ -38,7 +38,7 @@ export function MiniSpark({
 
   if (data.length < 2) {
     return (
-      <div 
+      <div
         className="flex items-center justify-center text-xs text-slate-400"
         style={{ width, height }}
       >

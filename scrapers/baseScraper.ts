@@ -5,7 +5,7 @@ import { absolutize, firstFromSrcset } from "../utils/urlHelpers";
 import type { News } from "../types/news";
 
 export const fetchArticleDetails = async (
-  articleUrl: string
+  articleUrl: string,
 ): Promise<{ image?: string; publishedAt?: number }> => {
   try {
     const res = await axios.get(articleUrl, {
@@ -14,23 +14,25 @@ export const fetchArticleDetails = async (
     });
     const $ = load(res.data);
     const og =
-      $('meta[property="og:image"]').attr('content') ||
-      $('meta[name="og:image"]').attr('content') ||
-      $('meta[property="twitter:image"]').attr('content') ||
-      $('meta[name="twitter:image"]').attr('content');
+      $('meta[property="og:image"]').attr("content") ||
+      $('meta[name="og:image"]').attr("content") ||
+      $('meta[property="twitter:image"]').attr("content") ||
+      $('meta[name="twitter:image"]').attr("content");
     let image = og ? absolutize(og, articleUrl) : undefined;
-    
+
     // common fallbacks
-    const img = $('article img, figure img, img.nolazy, img[loading], img').first().attr('src');
+    const img = $("article img, figure img, img.nolazy, img[loading], img")
+      .first()
+      .attr("src");
     if (!image && img) image = absolutize(img, articleUrl);
 
     const timeStr =
-      $('meta[property="article:published_time"]').attr('content') ||
-      $('meta[name="article:published_time"]').attr('content') ||
-      $('meta[property="og:updated_time"]').attr('content') ||
-      $('meta[name="date"]').attr('content') ||
-      $('time[datetime]').attr('datetime') ||
-      $('meta[itemprop="datePublished"]').attr('content') ||
+      $('meta[property="article:published_time"]').attr("content") ||
+      $('meta[name="article:published_time"]').attr("content") ||
+      $('meta[property="og:updated_time"]').attr("content") ||
+      $('meta[name="date"]').attr("content") ||
+      $("time[datetime]").attr("datetime") ||
+      $('meta[itemprop="datePublished"]').attr("content") ||
       undefined;
     const publishedAt = timeStr ? Date.parse(timeStr) : undefined;
 
@@ -44,7 +46,7 @@ export const fetchArticleDetails = async (
 export const pickListingImage = (
   $: CheerioAPI,
   el: AnyNode,
-  base: string
+  base: string,
 ): string | undefined => {
   const attrPick = (img: Cheerio<AnyNode>) => {
     const attrs = img.attr() || {};
@@ -100,15 +102,26 @@ export const parseAnchorWithCoverAndContent = (
   anchor: Cheerio<AnyNode>,
   baseLink: string,
   coverSelector?: string,
-  contentSelector?: string
-): { title?: string; image?: string; publishedAt?: number; author?: string } => {
+  contentSelector?: string,
+): {
+  title?: string;
+  image?: string;
+  publishedAt?: number;
+  author?: string;
+} => {
   let image: string | undefined;
   if (coverSelector) {
     const cover = anchor.find(coverSelector).first();
     // Prefer direct <img>, else <picture> <source srcset>
-    const imgEl = cover.find('img').first();
-    const direct = imgEl.attr('src') || imgEl.attr('data-src') || imgEl.attr('data-lazy-src') || undefined;
-    const fromSet = direct ? undefined : firstFromSrcset(imgEl.attr('srcset') || imgEl.attr('data-srcset'));
+    const imgEl = cover.find("img").first();
+    const direct =
+      imgEl.attr("src") ||
+      imgEl.attr("data-src") ||
+      imgEl.attr("data-lazy-src") ||
+      undefined;
+    const fromSet = direct
+      ? undefined
+      : firstFromSrcset(imgEl.attr("srcset") || imgEl.attr("data-srcset"));
     const chosen = direct || fromSet;
     // Filter out svgs and data URIs
     if (chosen && !/^data:/i.test(chosen) && !/\.svg($|\?)/i.test(chosen)) {
@@ -122,19 +135,22 @@ export const parseAnchorWithCoverAndContent = (
   if (contentSelector) {
     const content = anchor.find(contentSelector).first();
     const titleText =
-      content.find('h2, h3, .title').first().text() ||
+      content.find("h2, h3, .title").first().text() ||
       content.text() ||
       anchor.text() ||
-      '';
-    title = titleText.replace(/\s+/g, ' ').trim();
-    const timeStr = content.find('time[datetime]').attr('datetime') || undefined;
+      "";
+    title = titleText.replace(/\s+/g, " ").trim();
+    const timeStr =
+      content.find("time[datetime]").attr("datetime") || undefined;
     publishedAt = timeStr ? Date.parse(timeStr) : undefined;
     const authorText =
-      content.find('a[rel="author"], .author, .byline, [itemprop="author"]').first().text() ||
-      undefined;
-    author = authorText ? authorText.replace(/\s+/g, ' ').trim() : undefined;
+      content
+        .find('a[rel="author"], .author, .byline, [itemprop="author"]')
+        .first()
+        .text() || undefined;
+    author = authorText ? authorText.replace(/\s+/g, " ").trim() : undefined;
   } else {
-    title = (anchor.text() || '').replace(/\s+/g, ' ').trim();
+    title = (anchor.text() || "").replace(/\s+/g, " ").trim();
   }
 
   return { title, image, publishedAt, author };

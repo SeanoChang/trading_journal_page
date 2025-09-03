@@ -43,7 +43,7 @@ export default function ReviewForm({ trade, onSubmit }: ReviewFormProps) {
       <div className="text-sm text-slate-600 dark:text-slate-400">
         Reviewing: {trade.pair} • {trade.direction.toUpperCase()}
       </div>
-      
+
       <Input
         label="Average Entry Price"
         type="number"
@@ -52,7 +52,7 @@ export default function ReviewForm({ trade, onSubmit }: ReviewFormProps) {
         onValueChange={setAvgEntry}
         placeholder="Enter avg entry price"
       />
-      
+
       <Input
         label="Average Exit Price"
         type="number"
@@ -61,7 +61,7 @@ export default function ReviewForm({ trade, onSubmit }: ReviewFormProps) {
         onValueChange={setAvgExit}
         placeholder="Enter avg exit price"
       />
-      
+
       <Input
         label="Realized R"
         type="number"
@@ -70,16 +70,13 @@ export default function ReviewForm({ trade, onSubmit }: ReviewFormProps) {
         onValueChange={setRealizedR}
         placeholder="Enter realized R value"
       />
-      
-      <Checkbox
-        isSelected={stuckToPlan}
-        onValueChange={setStuckToPlan}
-      >
+
+      <Checkbox isSelected={stuckToPlan} onValueChange={setStuckToPlan}>
         Stuck to original plan
       </Checkbox>
-      
-      <Button 
-        color="primary" 
+
+      <Button
+        color="primary"
         onPress={handleSubmit}
         isDisabled={!avgEntry && !avgExit && !realizedR}
         fullWidth

@@ -10,7 +10,7 @@ async function getPrices(assets: string) {
         headers: {
           "X-CMC_PRO_API_KEY": process.env.COINMARKETCAP_API_KEY as string,
         },
-      }
+      },
     );
   } catch (ex) {
     response = null;
@@ -52,4 +52,3 @@ export async function GET(req: NextRequest) {
   if (prices) return NextResponse.json(prices);
   return NextResponse.json({ error: "Error getting prices" }, { status: 500 });
 }
-

@@ -24,7 +24,8 @@ const useDarkMode = (): [boolean, () => void] => {
       } catch {
         const normalized = localTheme.replace(/"/g, "").toLowerCase();
         if (normalized === "dark" || normalized === "true") setTheme(true);
-        else if (normalized === "light" || normalized === "false") setTheme(false);
+        else if (normalized === "light" || normalized === "false")
+          setTheme(false);
       }
     }
   }, []);

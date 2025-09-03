@@ -17,11 +17,26 @@ function rangeDays(n: number) {
   return out;
 }
 
-export default function Heatmap({ stats, weeks = 12, title = "Consistency" }: { stats: Record<string, number>; weeks?: number; title?: string }) {
+export default function Heatmap({
+  stats,
+  weeks = 12,
+  title = "Consistency",
+}: {
+  stats: Record<string, number>;
+  weeks?: number;
+  title?: string;
+}) {
   const days = rangeDays(weeks * 7);
-  const levels = (cnt: number) => (cnt >= 5 ? 4 : cnt >= 3 ? 3 : cnt >= 2 ? 2 : cnt >= 1 ? 1 : 0);
+  const levels = (cnt: number) =>
+    cnt >= 5 ? 4 : cnt >= 3 ? 3 : cnt >= 2 ? 2 : cnt >= 1 ? 1 : 0;
   const levelClass = (lvl: number) =>
-    ["bg-slate-200 dark:bg-slate-800", "bg-emerald-200 dark:bg-emerald-900/60", "bg-emerald-300 dark:bg-emerald-800", "bg-emerald-400 dark:bg-emerald-700", "bg-emerald-500 dark:bg-emerald-600"][lvl];
+    [
+      "bg-slate-200 dark:bg-slate-800",
+      "bg-emerald-200 dark:bg-emerald-900/60",
+      "bg-emerald-300 dark:bg-emerald-800",
+      "bg-emerald-400 dark:bg-emerald-700",
+      "bg-emerald-500 dark:bg-emerald-600",
+    ][lvl];
 
   return (
     <div>
@@ -35,7 +50,13 @@ export default function Heatmap({ stats, weeks = 12, title = "Consistency" }: { 
               const key = format(d);
               const cnt = stats[key] ?? 0;
               const lvl = levels(cnt);
-              return <div key={key} className={`h-3 w-3 rounded ${levelClass(lvl)}`} title={`${key}: ${cnt}`} />;
+              return (
+                <div
+                  key={key}
+                  className={`h-3 w-3 rounded ${levelClass(lvl)}`}
+                  title={`${key}: ${cnt}`}
+                />
+              );
             })}
           </div>
         ))}
@@ -43,4 +64,3 @@ export default function Heatmap({ stats, weeks = 12, title = "Consistency" }: { 
     </div>
   );
 }
-

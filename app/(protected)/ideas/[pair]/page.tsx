@@ -12,13 +12,21 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function PairHome({ params }: { params: Promise<{ pair: string }> }) {
+export default async function PairHome({
+  params,
+}: {
+  params: Promise<{ pair: string }>;
+}) {
   const resolvedParams = await params;
-  const pairDirectory = path.join(process.cwd(), "data", "journals_mdx", resolvedParams.pair);
+  const pairDirectory = path.join(
+    process.cwd(),
+    "data",
+    "journals_mdx",
+    resolvedParams.pair,
+  );
   let posts: string[] = [];
   try {
     posts = fs.readdirSync(pairDirectory);
   } catch {}
   return <PairHomeClient pair={resolvedParams.pair} posts={posts} />;
 }
-

@@ -27,7 +27,7 @@ export const useMarketData = ({
       const data = await fetchPrices(symbols);
       setMarket(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to fetch market data');
+      setError(e instanceof Error ? e.message : "Failed to fetch market data");
       setMarket([]);
     } finally {
       setLoading(false);
@@ -45,7 +45,7 @@ export const useMarketData = ({
     };
 
     load();
-    
+
     if (refreshInterval > 0) {
       intervalId = setInterval(load, refreshInterval);
     }
@@ -54,7 +54,7 @@ export const useMarketData = ({
       mounted = false;
       if (intervalId) clearInterval(intervalId);
     };
-  }, [refreshInterval, symbols.join(',')]);
+  }, [refreshInterval, symbols.join(",")]);
 
   const rows = useMemo(() => market ?? [], [market]);
 

@@ -44,16 +44,17 @@ function getIconForProvider(provider: Provider): IconType {
 
 export default function SignInPage() {
   const [providers, setProviders] = useState<Record<string, Provider> | null>(
-    null
+    null,
   );
 
   useEffect(() => {
     getProviders().then((prov) => setProviders(prov));
   }, []);
 
-  const items = useMemo(() => (providers ? Object.values(providers) : []), [
-    providers,
-  ]);
+  const items = useMemo(
+    () => (providers ? Object.values(providers) : []),
+    [providers],
+  );
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-neutral-50 dark:bg-black">
@@ -63,8 +64,18 @@ export default function SignInPage() {
         aria-hidden
       >
         <defs>
-          <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="currentColor" strokeWidth="0.5" />
+          <pattern
+            id="grid"
+            width="32"
+            height="32"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 32 0 L 0 0 0 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.5"
+            />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#grid)" />
@@ -94,14 +105,19 @@ export default function SignInPage() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="w-full max-w-md mx-auto"
         >
-          <Card radius="lg" shadow="sm" className="border border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md">
+          <Card
+            radius="lg"
+            shadow="sm"
+            className="border border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md"
+          >
             <CardBody className="p-6 sm:p-8">
               <div className="space-y-2">
                 <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
                   Welcome back
                 </h1>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                  Sign in to your trading journal, price dashboard, and curated news feed.
+                  Sign in to your trading journal, price dashboard, and curated
+                  news feed.
                 </p>
               </div>
 
@@ -126,7 +142,9 @@ export default function SignInPage() {
                         variant="flat"
                         className="justify-start border border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80"
                         startContent={<Icon className="h-5 w-5" />}
-                        onPress={() => signIn(provider.id, { callbackUrl: "/protected" })}
+                        onPress={() =>
+                          signIn(provider.id, { callbackUrl: "/protected" })
+                        }
                         aria-label={`Sign in with ${provider.name}`}
                       >
                         {provider.name}
@@ -137,16 +155,32 @@ export default function SignInPage() {
               )}
 
               <div className="mt-6 flex flex-wrap gap-2">
-                <Chip size="sm" variant="flat" className="bg-neutral-100 dark:bg-neutral-800">
+                <Chip
+                  size="sm"
+                  variant="flat"
+                  className="bg-neutral-100 dark:bg-neutral-800"
+                >
                   Journal
                 </Chip>
-                <Chip size="sm" variant="flat" className="bg-neutral-100 dark:bg-neutral-800">
+                <Chip
+                  size="sm"
+                  variant="flat"
+                  className="bg-neutral-100 dark:bg-neutral-800"
+                >
                   Prices
                 </Chip>
-                <Chip size="sm" variant="flat" className="bg-neutral-100 dark:bg-neutral-800">
+                <Chip
+                  size="sm"
+                  variant="flat"
+                  className="bg-neutral-100 dark:bg-neutral-800"
+                >
                   News
                 </Chip>
-                <Chip size="sm" variant="flat" className="bg-neutral-100 dark:bg-neutral-800">
+                <Chip
+                  size="sm"
+                  variant="flat"
+                  className="bg-neutral-100 dark:bg-neutral-800"
+                >
                   Resources
                 </Chip>
               </div>

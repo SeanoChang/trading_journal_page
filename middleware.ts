@@ -3,15 +3,16 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  
+
   const isAuthPage = pathname.startsWith("/auth");
-  const isProtectedPage = pathname.startsWith("/dashboard") ||
-                         pathname.startsWith("/trades") ||
-                         pathname.startsWith("/ideas") ||
-                         pathname.startsWith("/explore") ||
-                         pathname.startsWith("/settings") ||
-                         pathname.startsWith("/exchanges") ||
-                         pathname.startsWith("/books_review");
+  const isProtectedPage =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/trades") ||
+    pathname.startsWith("/ideas") ||
+    pathname.startsWith("/explore") ||
+    pathname.startsWith("/settings") ||
+    pathname.startsWith("/exchanges") ||
+    pathname.startsWith("/books_review");
 
   // Check authentication by calling the me endpoint
   try {
@@ -46,7 +47,7 @@ export async function middleware(request: NextRequest) {
     if (isProtectedPage) {
       return NextResponse.redirect(new URL("/auth/signin", request.url));
     }
-    
+
     return NextResponse.next();
   }
 }
@@ -55,12 +56,12 @@ export const config = {
   matcher: [
     "/",
     "/dashboard/:path*",
-    "/trades/:path*", 
+    "/trades/:path*",
     "/ideas/:path*",
     "/explore/:path*",
     "/settings/:path*",
     "/exchanges/:path*",
     "/books_review/:path*",
-    "/auth/:path*"
-  ]
+    "/auth/:path*",
+  ],
 };

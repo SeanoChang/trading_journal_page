@@ -10,4 +10,3 @@ export async function fetchPrices(assets: string[]): Promise<Price[]> {
   if (Array.isArray(data)) return data;
   throw new Error("Invalid prices payload");
 }
-

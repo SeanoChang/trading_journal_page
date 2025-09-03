@@ -2,7 +2,7 @@ import type { JournalEntry, JournalTag, Trade } from "@prisma/client";
 
 export type JournalEntryWithTags = JournalEntry & {
   tags: JournalTag[];
-  trades: Pick<Trade, 'id' | 'pair' | 'side' | 'orderStatus'>[];
+  trades: Pick<Trade, "id" | "pair" | "side" | "orderStatus">[];
 };
 
 export interface Node extends JournalEntryWithTags {

@@ -21,13 +21,19 @@ function toStatsMap(entries: JournalEntry[]) {
 function computeMetrics(entries: JournalEntry[]) {
   const n = entries.length;
   const moods = entries.map((e) => e.mood);
-  const avgMood = n ? Math.round((moods.reduce((s, v) => s + v, 0) / n) * 10) / 10 : 0;
+  const avgMood = n
+    ? Math.round((moods.reduce((s, v) => s + v, 0) / n) * 10) / 10
+    : 0;
 
   const adherenceArr: number[] = entries.map((e) => (e.adherence ? 1 : 0));
-  const adherenceRate = n ? Math.round((adherenceArr.reduce((s, v) => s + v, 0) / n) * 100) : 0;
+  const adherenceRate = n
+    ? Math.round((adherenceArr.reduce((s, v) => s + v, 0) / n) * 100)
+    : 0;
 
   const rs = entries.map((e) => (typeof e.r === "number" ? e.r : 0));
-  const avgR = n ? Math.round((rs.reduce((s, v) => s + v, 0) / n) * 100) / 100 : 0;
+  const avgR = n
+    ? Math.round((rs.reduce((s, v) => s + v, 0) / n) * 100) / 100
+    : 0;
 
   // Streak (consecutive days with entries up to today)
   const dates = new Set(entries.map((e) => e.date));
@@ -43,24 +49,48 @@ function computeMetrics(entries: JournalEntry[]) {
 
   // Top tags
   const tagCount = new Map<string, number>();
-  entries.forEach((e) => e.tags.forEach((t) => tagCount.set(t, (tagCount.get(t) ?? 0) + 1)));
-  const topTags = Array.from(tagCount.entries()).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  entries.forEach((e) =>
+    e.tags.forEach((t) => tagCount.set(t, (tagCount.get(t) ?? 0) + 1)),
+  );
+  const topTags = Array.from(tagCount.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
 
   return { avgMood, adherenceRate, avgR, streak, topTags };
 }
 
-function suggestions(m: { avgMood: number; adherenceRate: number; avgR: number; streak: number; topTags: [string, number][] }) {
+function suggestions(m: {
+  avgMood: number;
+  adherenceRate: number;
+  avgR: number;
+  streak: number;
+  topTags: [string, number][];
+}) {
   const out: string[] = [];
-  if (m.adherenceRate < 60) out.push("Focus on pre-trade checklist; aim ≥70% plan adherence this week.");
-  if (m.avgMood <= 2) out.push("Mood is low. Add a small break/ritual before sessions.");
-  if (m.avgR < 0) out.push("Average R is negative; reduce size and trade A+ setups.");
-  if (m.streak < 3) out.push("Build a 3-day journaling streak with micro-entries.");
-  if (m.topTags.some(([t]) => t === "overtrading")) out.push("Set a max-trade count and honor it to curb overtrading.");
-  if (out.length === 0) out.push("Great consistency. Gradually raise standards and refine your playbook.");
+  if (m.adherenceRate < 60)
+    out.push(
+      "Focus on pre-trade checklist; aim ≥70% plan adherence this week.",
+    );
+  if (m.avgMood <= 2)
+    out.push("Mood is low. Add a small break/ritual before sessions.");
+  if (m.avgR < 0)
+    out.push("Average R is negative; reduce size and trade A+ setups.");
+  if (m.streak < 3)
+    out.push("Build a 3-day journaling streak with micro-entries.");
+  if (m.topTags.some(([t]) => t === "overtrading"))
+    out.push("Set a max-trade count and honor it to curb overtrading.");
+  if (out.length === 0)
+    out.push(
+      "Great consistency. Gradually raise standards and refine your playbook.",
+    );
   return out;
 }
 
-export default function InsightsPanel({ entries }: { entries: JournalEntry[] }) {
+export default function InsightsPanel({
+  entries,
+}: {
+  entries: JournalEntry[];
+}) {
   const stats = toStatsMap(entries);
   const m = computeMetrics(entries);
   const tips = suggestions(m);
@@ -75,10 +105,32 @@ export default function InsightsPanel({ entries }: { entries: JournalEntry[] }) 
       <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur p-4">
         <div className="text-sm font-semibold mb-2">Key metrics</div>
         <div className="grid grid-cols-2 gap-3 text-sm">
-          <Metric label="Avg mood" value={String(m.avgMood)} tone={m.avgMood >= 3 ? "pos" : "neg"} />
-          <Metric label="Adherence" value={`${m.adherenceRate}%`} tone={m.adherenceRate >= 70 ? "pos" : m.adherenceRate >= 50 ? "muted" : "neg"} />
-          <Metric label="Avg R" value={String(m.avgR)} tone={m.avgR >= 0 ? "pos" : "neg"} />
-          <Metric label="Streak" value={`${m.streak}d`} tone={m.streak >= 3 ? "pos" : "muted"} />
+          <Metric
+            label="Avg mood"
+            value={String(m.avgMood)}
+            tone={m.avgMood >= 3 ? "pos" : "neg"}
+          />
+          <Metric
+            label="Adherence"
+            value={`${m.adherenceRate}%`}
+            tone={
+              m.adherenceRate >= 70
+                ? "pos"
+                : m.adherenceRate >= 50
+                  ? "muted"
+                  : "neg"
+            }
+          />
+          <Metric
+            label="Avg R"
+            value={String(m.avgR)}
+            tone={m.avgR >= 0 ? "pos" : "neg"}
+          />
+          <Metric
+            label="Streak"
+            value={`${m.streak}d`}
+            tone={m.streak >= 3 ? "pos" : "muted"}
+          />
         </div>
         {m.topTags.length > 0 && (
           <div className="mt-3 text-xs text-default-500">
@@ -99,8 +151,21 @@ export default function InsightsPanel({ entries }: { entries: JournalEntry[] }) 
   );
 }
 
-function Metric({ label, value, tone = "muted" }: { label: string; value: string; tone?: "pos" | "neg" | "muted" }) {
-  const cls = tone === "pos" ? "text-emerald-600" : tone === "neg" ? "text-rose-600" : "text-default-600";
+function Metric({
+  label,
+  value,
+  tone = "muted",
+}: {
+  label: string;
+  value: string;
+  tone?: "pos" | "neg" | "muted";
+}) {
+  const cls =
+    tone === "pos"
+      ? "text-emerald-600"
+      : tone === "neg"
+        ? "text-rose-600"
+        : "text-default-600";
   return (
     <div className="rounded-lg border border-slate-200 dark:border-slate-800 p-3">
       <div className="text-xs text-default-500">{label}</div>

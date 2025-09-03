@@ -1,13 +1,21 @@
-import { useEffect, useState } from 'react';
-import type { GraphDimensions } from '../../types/ideas-graph';
+import { useEffect, useState } from "react";
+import type { GraphDimensions } from "../../types/ideas-graph";
 
-export function useDimensions(containerRef: React.RefObject<HTMLDivElement | null>): GraphDimensions {
-  const [dimensions, setDimensions] = useState<GraphDimensions>({ width: 1200, height: 800 });
+export function useDimensions(
+  containerRef: React.RefObject<HTMLDivElement | null>,
+): GraphDimensions {
+  const [dimensions, setDimensions] = useState<GraphDimensions>({
+    width: 1200,
+    height: 800,
+  });
 
   useEffect(() => {
     const updateFromRect = (rect: DOMRectReadOnly | DOMRect) => {
       const newWidth = Math.max(0, Math.round(rect.width));
-      const newHeight = Math.max(0, Math.round(rect.height || window.innerHeight));
+      const newHeight = Math.max(
+        0,
+        Math.round(rect.height || window.innerHeight),
+      );
       setDimensions({ width: newWidth, height: newHeight });
     };
 
@@ -20,7 +28,7 @@ export function useDimensions(containerRef: React.RefObject<HTMLDivElement | nul
 
     // Observe container size changes
     let ro: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+    if (typeof ResizeObserver !== "undefined" && containerRef.current) {
       ro = new ResizeObserver((entries) => {
         const entry = entries[0];
         if (entry) updateFromRect(entry.contentRect);
@@ -30,13 +38,15 @@ export function useDimensions(containerRef: React.RefObject<HTMLDivElement | nul
 
     // Fallback on window resize
     const onResize = () => {
-      if (containerRef.current) updateFromRect(containerRef.current.getBoundingClientRect());
-      else setDimensions({ width: window.innerWidth, height: window.innerHeight });
+      if (containerRef.current)
+        updateFromRect(containerRef.current.getBoundingClientRect());
+      else
+        setDimensions({ width: window.innerWidth, height: window.innerHeight });
     };
-    window.addEventListener('resize', onResize);
+    window.addEventListener("resize", onResize);
 
     return () => {
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener("resize", onResize);
       if (ro) ro.disconnect();
     };
   }, [containerRef]);

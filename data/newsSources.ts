@@ -13,10 +13,17 @@ export const newsSources: NewsSource[] = [
   {
     name: "CoinDesk",
     url: "https://www.coindesk.com",
-    paths: ["/latest-crypto-news", "/markets/", "/tech/", "/business/", "/policy/"],
+    paths: [
+      "/latest-crypto-news",
+      "/markets/",
+      "/tech/",
+      "/business/",
+      "/policy/",
+    ],
     // Livewire module article items
-    selector: 'div[data-module-name="livewire-module"] .bg-white.flex.gap-6.w-full.shrink.justify-between',
-    linkSelector: 'a.text-color-charcoal-900.content-card-title',
+    selector:
+      'div[data-module-name="livewire-module"] .bg-white.flex.gap-6.w-full.shrink.justify-between',
+    linkSelector: "a.text-color-charcoal-900.content-card-title",
   },
   {
     name: "CryptoSlate",

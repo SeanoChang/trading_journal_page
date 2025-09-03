@@ -31,14 +31,26 @@ export default function SourcesPage() {
               link="https://seeklogo.com/free-vector-logos/solana"
               text="seeklogo for Solana, Lunc"
             />
-            <ListItems link="https://near.org/about/brand/" text="NEAR for Near icon" />
-            <ListItems link="https://www.iconfinder.com/" text="Icon Finder for Cardano" />
+            <ListItems
+              link="https://near.org/about/brand/"
+              text="NEAR for Near icon"
+            />
+            <ListItems
+              link="https://www.iconfinder.com/"
+              text="Icon Finder for Cardano"
+            />
             <ListItems
               link="https://iconduck.com/icons/81765/generic-cryptocurrency"
               text="Icon Duck for Generic Cryptocurrency"
             />
-            <ListItems link="https://www.marketbeat.com/cryptocurrencies/aptos/" text="Market Beat for Aptos" />
-            <ListItems link="https://mobile.twitter.com/dydx" text="Dydx for Dydx" />
+            <ListItems
+              link="https://www.marketbeat.com/cryptocurrencies/aptos/"
+              text="Market Beat for Aptos"
+            />
+            <ListItems
+              link="https://mobile.twitter.com/dydx"
+              text="Dydx for Dydx"
+            />
             <ListItems
               link="https://pixelbuddha.net/icons/blockchain-vector-icons-free-download"
               text="Blockchain icons"
@@ -49,4 +61,3 @@ export default function SourcesPage() {
     </div>
   );
 }
-

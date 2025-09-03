@@ -1,6 +1,15 @@
 "use client";
 
-import { Card, CardBody, CardHeader, Switch, Select, SelectItem, Button, Divider } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Switch,
+  Select,
+  SelectItem,
+  Button,
+  Divider,
+} from "@heroui/react";
 import { FiUser, FiLock, FiMoon, FiBell, FiDatabase } from "react-icons/fi";
 import { useState } from "react";
 
@@ -12,8 +21,12 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Settings</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-2">Manage your account preferences and trading configuration</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+          Settings
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-2">
+          Manage your account preferences and trading configuration
+        </p>
       </div>
 
       {/* Account Settings */}
@@ -22,16 +35,20 @@ export default function SettingsPage() {
           <FiUser className="h-5 w-5" />
           <div className="flex flex-col">
             <p className="text-md font-semibold">Account</p>
-            <p className="text-small text-slate-500">Manage your account settings</p>
+            <p className="text-small text-slate-500">
+              Manage your account settings
+            </p>
           </div>
         </CardHeader>
         <CardBody className="space-y-4">
           <div className="flex justify-between items-center">
             <div>
               <p className="font-medium">Email notifications</p>
-              <p className="text-sm text-slate-500">Receive updates about your trades</p>
+              <p className="text-sm text-slate-500">
+                Receive updates about your trades
+              </p>
             </div>
-            <Switch 
+            <Switch
               isSelected={notifications}
               onValueChange={setNotifications}
               startContent={<FiBell />}
@@ -46,16 +63,20 @@ export default function SettingsPage() {
           <FiMoon className="h-5 w-5" />
           <div className="flex flex-col">
             <p className="text-md font-semibold">Appearance</p>
-            <p className="text-small text-slate-500">Customize your interface</p>
+            <p className="text-small text-slate-500">
+              Customize your interface
+            </p>
           </div>
         </CardHeader>
         <CardBody className="space-y-4">
           <div className="flex justify-between items-center">
             <div>
               <p className="font-medium">Dark mode</p>
-              <p className="text-sm text-slate-500">Switch between light and dark themes</p>
+              <p className="text-sm text-slate-500">
+                Switch between light and dark themes
+              </p>
             </div>
-            <Switch 
+            <Switch
               isSelected={darkMode}
               onValueChange={setDarkMode}
               startContent={<FiMoon />}
@@ -70,7 +91,9 @@ export default function SettingsPage() {
           <FiDatabase className="h-5 w-5" />
           <div className="flex flex-col">
             <p className="text-md font-semibold">Trading</p>
-            <p className="text-small text-slate-500">Configure your trading preferences</p>
+            <p className="text-small text-slate-500">
+              Configure your trading preferences
+            </p>
           </div>
         </CardHeader>
         <CardBody className="space-y-4">
@@ -78,7 +101,9 @@ export default function SettingsPage() {
             <p className="font-medium">Default Exchange</p>
             <Select
               selectedKeys={[defaultExchange]}
-              onSelectionChange={(keys) => setDefaultExchange(Array.from(keys)[0] as string)}
+              onSelectionChange={(keys) =>
+                setDefaultExchange(Array.from(keys)[0] as string)
+              }
               className="max-w-xs"
             >
               <SelectItem key="binance">Binance</SelectItem>
@@ -96,7 +121,9 @@ export default function SettingsPage() {
           <FiLock className="h-5 w-5" />
           <div className="flex flex-col">
             <p className="text-md font-semibold">Privacy & Security</p>
-            <p className="text-small text-slate-500">Manage your security settings</p>
+            <p className="text-small text-slate-500">
+              Manage your security settings
+            </p>
           </div>
         </CardHeader>
         <CardBody className="space-y-4">

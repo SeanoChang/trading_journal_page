@@ -5,14 +5,21 @@ export default function AdminPage() {
   const { status } = useSession();
 
   if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
   }
 
   if (status === "unauthenticated") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <p>Admin requires sign-in.</p>
-        <button className="px-4 py-2 rounded bg-blue-600 text-white" onClick={() => signIn()}>
+        <button
+          className="px-4 py-2 rounded bg-blue-600 text-white"
+          onClick={() => signIn()}
+        >
           Sign in
         </button>
       </div>
@@ -25,4 +32,3 @@ export default function AdminPage() {
     </div>
   );
 }
-

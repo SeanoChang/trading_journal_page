@@ -12,7 +12,7 @@ export interface Idea {
 
 export interface TagNode {
   id: string;
-  type: 'tag';
+  type: "tag";
   name: string;
   parent?: string;
   level: number;
@@ -27,7 +27,7 @@ export interface TagNode {
 }
 
 export interface IdeaNode extends Idea {
-  type: 'idea';
+  type: "idea";
   x?: number;
   y?: number;
   vx?: number;
@@ -41,17 +41,22 @@ export interface IdeaNode extends Idea {
 
 export type Node = IdeaNode | TagNode;
 
-export interface Link { 
-  source: string | Node; 
-  target: string | Node; 
-  weight: number; 
+export interface Link {
+  source: string | Node;
+  target: string | Node;
+  weight: number;
   kind: "topic" | "tag" | "strategy" | "temporal" | "hierarchy" | "ticker";
   distance: number;
   strength: number;
   age?: number; // for temporal links
 }
 
-export type LinkMode = "all" | "temporal" | "conceptual" | "hierarchy" | "ticker";
+export type LinkMode =
+  | "all"
+  | "temporal"
+  | "conceptual"
+  | "hierarchy"
+  | "ticker";
 
 export interface GraphData {
   nodes: Node[];

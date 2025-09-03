@@ -26,14 +26,18 @@ interface JournalEntryFormProps {
   onClear?: () => void;
 }
 
-export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: JournalEntryFormProps) {
+export default function JournalEntryForm({
+  selectedDate,
+  onSubmit,
+  onClear,
+}: JournalEntryFormProps) {
   const [draft, setDraft] = useState<DraftEntry>({
     title: "",
     content: "",
     mood: "",
     confidence: "",
     tags: "",
-    tradeIds: []
+    tradeIds: [],
   });
   const [tagInput, setTagInput] = useState("");
   const [trades, setTrades] = useState<Trade[]>([]);
@@ -43,16 +47,16 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
   useEffect(() => {
     const fetchTrades = async () => {
       try {
-        const response = await fetch('/api/trades');
+        const response = await fetch("/api/trades");
         if (response.ok) {
           const tradesData = await response.json();
           setTrades(Array.isArray(tradesData) ? tradesData : []);
         } else {
-          console.error('Failed to fetch trades');
+          console.error("Failed to fetch trades");
           setTrades([]);
         }
       } catch (error) {
-        console.error('Error fetching trades:', error);
+        console.error("Error fetching trades:", error);
         setTrades([]);
       } finally {
         setIsLoadingTrades(false);
@@ -64,23 +68,27 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
 
   const addTag = (tag: string) => {
     if (!tag.trim()) return;
-    const existingTags = draft.tags ? draft.tags.split(",").map(t => t.trim()) : [];
+    const existingTags = draft.tags
+      ? draft.tags.split(",").map((t) => t.trim())
+      : [];
     if (!existingTags.includes(tag.trim())) {
       const newTags = [...existingTags, tag.trim()].join(", ");
-      setDraft(d => ({ ...d, tags: newTags }));
+      setDraft((d) => ({ ...d, tags: newTags }));
     }
     setTagInput("");
   };
 
   const removeTag = (tagToRemove: string) => {
-    const existingTags = draft.tags ? draft.tags.split(",").map(t => t.trim()) : [];
-    const filteredTags = existingTags.filter(tag => tag !== tagToRemove);
-    setDraft(d => ({ ...d, tags: filteredTags.join(", ") }));
+    const existingTags = draft.tags
+      ? draft.tags.split(",").map((t) => t.trim())
+      : [];
+    const filteredTags = existingTags.filter((tag) => tag !== tagToRemove);
+    setDraft((d) => ({ ...d, tags: filteredTags.join(", ") }));
   };
 
   const handleSubmit = () => {
     if (!onSubmit) return;
-    
+
     const cleanTags = draft.tags
       .split(",")
       .map((t) => t.trim())
@@ -99,12 +107,24 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
   };
 
   const handleClear = () => {
-    setDraft({ title: "", content: "", mood: "", confidence: "", tags: "", tradeIds: [] });
+    setDraft({
+      title: "",
+      content: "",
+      mood: "",
+      confidence: "",
+      tags: "",
+      tradeIds: [],
+    });
     setTagInput("");
     onClear?.();
   };
 
-  const existingTagsArray = draft.tags ? draft.tags.split(",").map(t => t.trim()).filter(Boolean) : [];
+  const existingTagsArray = draft.tags
+    ? draft.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+    : [];
 
   return (
     <>
@@ -117,7 +137,9 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
               type="text"
               placeholder="Untitled"
               value={draft.title}
-              onChange={(e) => setDraft(d => ({ ...d, title: e.target.value }))}
+              onChange={(e) =>
+                setDraft((d) => ({ ...d, title: e.target.value }))
+              }
               className="w-full text-2xl font-bold text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 bg-transparent border-none outline-none resize-none"
             />
           </div>
@@ -127,7 +149,9 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
             <textarea
               placeholder="What's on your mind today?"
               value={draft.content}
-              onChange={(e) => setDraft(d => ({ ...d, content: e.target.value }))}
+              onChange={(e) =>
+                setDraft((d) => ({ ...d, content: e.target.value }))
+              }
               onKeyDown={(e) => {
                 if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
                   e.preventDefault();
@@ -159,7 +183,9 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
               ))}
               <input
                 type="text"
-                placeholder={existingTagsArray.length === 0 ? "Add tags..." : ""}
+                placeholder={
+                  existingTagsArray.length === 0 ? "Add tags..." : ""
+                }
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -177,23 +203,30 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
             <Select
               label="Select related trades"
-              placeholder={isLoadingTrades ? "Loading trades..." : "Choose trades (optional)"}
+              placeholder={
+                isLoadingTrades
+                  ? "Loading trades..."
+                  : "Choose trades (optional)"
+              }
               selectionMode="multiple"
               selectedKeys={new Set(draft.tradeIds)}
               onSelectionChange={(keys) => {
-                setDraft(d => ({ ...d, tradeIds: Array.from(keys as Set<string>) }));
+                setDraft((d) => ({
+                  ...d,
+                  tradeIds: Array.from(keys as Set<string>),
+                }));
               }}
               size="sm"
               variant="flat"
               isDisabled={isLoadingTrades}
               classNames={{
                 trigger: "bg-transparent border-none shadow-none",
-                value: "text-slate-600 dark:text-slate-400"
+                value: "text-slate-600 dark:text-slate-400",
               }}
             >
               {trades.map((trade) => (
-                <SelectItem 
-                  key={trade.id} 
+                <SelectItem
+                  key={trade.id}
                   startContent={trade.side === "BUY" ? "📈" : "📉"}
                   description={`${trade.orderStatus} - ${trade.side}`}
                 >
@@ -209,47 +242,81 @@ export default function JournalEntryForm({ selectedDate, onSubmit, onClear }: Jo
               placeholder="How are you feeling?"
               selectedKeys={draft.mood ? new Set([draft.mood]) : new Set()}
               onSelectionChange={(keys) => {
-                const selectedMood = Array.from(keys as Set<string>)[0] as Mood || "";
-                setDraft(d => ({ ...d, mood: selectedMood }));
+                const selectedMood =
+                  (Array.from(keys as Set<string>)[0] as Mood) || "";
+                setDraft((d) => ({ ...d, mood: selectedMood }));
               }}
               size="sm"
               variant="flat"
               classNames={{
                 trigger: "bg-transparent border-none shadow-none",
-                value: "text-slate-600 dark:text-slate-400"
+                value: "text-slate-600 dark:text-slate-400",
               }}
             >
-              <SelectItem key="VERY_POSITIVE" startContent="😊">Very Positive</SelectItem>
-              <SelectItem key="POSITIVE" startContent="🙂">Positive</SelectItem>
-              <SelectItem key="NEUTRAL" startContent="😐">Neutral</SelectItem>
-              <SelectItem key="NEGATIVE" startContent="😕">Negative</SelectItem>
-              <SelectItem key="VERY_NEGATIVE" startContent="😞">Very Negative</SelectItem>
+              <SelectItem key="VERY_POSITIVE" startContent="😊">
+                Very Positive
+              </SelectItem>
+              <SelectItem key="POSITIVE" startContent="🙂">
+                Positive
+              </SelectItem>
+              <SelectItem key="NEUTRAL" startContent="😐">
+                Neutral
+              </SelectItem>
+              <SelectItem key="NEGATIVE" startContent="😕">
+                Negative
+              </SelectItem>
+              <SelectItem key="VERY_NEGATIVE" startContent="😞">
+                Very Negative
+              </SelectItem>
             </Select>
-            
+
             <Select
               placeholder="Confidence level (1-10)"
-              selectedKeys={draft.confidence ? new Set([draft.confidence]) : new Set()}
+              selectedKeys={
+                draft.confidence ? new Set([draft.confidence]) : new Set()
+              }
               onSelectionChange={(keys) => {
-                const selectedConfidence = Array.from(keys as Set<string>)[0] || "";
-                setDraft(d => ({ ...d, confidence: selectedConfidence }));
+                const selectedConfidence =
+                  Array.from(keys as Set<string>)[0] || "";
+                setDraft((d) => ({ ...d, confidence: selectedConfidence }));
               }}
               size="sm"
               variant="flat"
               classNames={{
                 trigger: "bg-transparent border-none shadow-none",
-                value: "text-slate-600 dark:text-slate-400"
+                value: "text-slate-600 dark:text-slate-400",
               }}
             >
-              <SelectItem key="1" startContent="🎯">1 - Very Low</SelectItem>
-              <SelectItem key="2" startContent="🎯">2 - Low</SelectItem>
-              <SelectItem key="3" startContent="🎯">3 - Below Average</SelectItem>
-              <SelectItem key="4" startContent="🎯">4 - Somewhat Low</SelectItem>
-              <SelectItem key="5" startContent="🎯">5 - Average</SelectItem>
-              <SelectItem key="6" startContent="🎯">6 - Somewhat High</SelectItem>
-              <SelectItem key="7" startContent="🎯">7 - Above Average</SelectItem>
-              <SelectItem key="8" startContent="🎯">8 - High</SelectItem>
-              <SelectItem key="9" startContent="🎯">9 - Very High</SelectItem>
-              <SelectItem key="10" startContent="🎯">10 - Extremely High</SelectItem>
+              <SelectItem key="1" startContent="🎯">
+                1 - Very Low
+              </SelectItem>
+              <SelectItem key="2" startContent="🎯">
+                2 - Low
+              </SelectItem>
+              <SelectItem key="3" startContent="🎯">
+                3 - Below Average
+              </SelectItem>
+              <SelectItem key="4" startContent="🎯">
+                4 - Somewhat Low
+              </SelectItem>
+              <SelectItem key="5" startContent="🎯">
+                5 - Average
+              </SelectItem>
+              <SelectItem key="6" startContent="🎯">
+                6 - Somewhat High
+              </SelectItem>
+              <SelectItem key="7" startContent="🎯">
+                7 - Above Average
+              </SelectItem>
+              <SelectItem key="8" startContent="🎯">
+                8 - High
+              </SelectItem>
+              <SelectItem key="9" startContent="🎯">
+                9 - Very High
+              </SelectItem>
+              <SelectItem key="10" startContent="🎯">
+                10 - Extremely High
+              </SelectItem>
             </Select>
           </div>
         </div>

@@ -16,19 +16,19 @@ export function Hero({ market, loading }: HeroProps) {
   return (
     <section className="flex flex-col-reverse lg:flex-row items-center justify-between gap-8 py-16 md:py-24">
       <div className="max-w-2xl">
-        <AnimatedText 
-          as="h1" 
-          className="text-4xl md:text-6xl font-extrabold leading-tight" 
-          text="Track markets. Journal ideas. Level up." 
-          delay={0.05} 
-          step={0.02} 
+        <AnimatedText
+          as="h1"
+          className="text-4xl md:text-6xl font-extrabold leading-tight"
+          text="Track markets. Journal ideas. Level up."
+          delay={0.05}
+          step={0.02}
         />
-        <AnimatedText 
-          as="p" 
-          className="mt-4 text-base md:text-lg text-slate-600 dark:text-slate-300" 
-          text="A clean hub for prices, curated news, and a focused trading journal — built to help you act with clarity." 
-          delay={0.8} 
-          step={0.01} 
+        <AnimatedText
+          as="p"
+          className="mt-4 text-base md:text-lg text-slate-600 dark:text-slate-300"
+          text="A clean hub for prices, curated news, and a focused trading journal — built to help you act with clarity."
+          delay={0.8}
+          step={0.01}
         />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button color="primary" size="md" onPress={() => signIn()}>
@@ -67,13 +67,13 @@ export function Hero({ market, loading }: HeroProps) {
               </span>
             </div>
             <div className="relative h-64 md:h-80">
-              <Image 
-                src="/screenshots/trading_journal.gif" 
-                alt="App preview" 
-                fill 
-                priority 
-                unoptimized 
-                className="object-cover" 
+              <Image
+                src="/screenshots/trading_journal.gif"
+                alt="App preview"
+                fill
+                priority
+                unoptimized
+                className="object-cover"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent dark:from-black/60" />
             </div>

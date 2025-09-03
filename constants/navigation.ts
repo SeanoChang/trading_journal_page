@@ -10,24 +10,24 @@ export interface NavLink {
 export const linkIcons: NavLink[] = [
   {
     href: "/",
-    label: "Home", 
-    icon: FiHome
+    label: "Home",
+    icon: FiHome,
   },
   {
     href: "/protected",
     label: "Dashboard",
-    icon: FiTrendingUp
+    icon: FiTrendingUp,
   },
   {
     href: "/protected/ideas_home",
     label: "Journal",
-    icon: FiEdit3
+    icon: FiEdit3,
   },
   {
-    href: "/news", 
+    href: "/news",
     label: "News",
-    icon: FiRss
-  }
+    icon: FiRss,
+  },
 ];
 
 export const footerLinks = [
