@@ -12,6 +12,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { validateExchangeCredentials } from "@/helpers/exchanges/validate";
 
 let client: SecretsManagerClient | null = null;
 
@@ -46,7 +47,7 @@ export async function GET() {
       const exchanges = Object.entries(exchangeData).map(
         ([exchangeName, data]: [string, any]) => ({
           id: exchangeName,
-          name: exchangeName,
+          name: data.name || exchangeName,
           exchange: exchangeName,
           apiKey: data.api_key ? data.api_key.slice(0, 8) + "***" : "",
           secretKey: "***hidden***",
@@ -87,13 +88,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { exchangeName, apiKey, secretKey } = await request.json();
+    const { apiName, exchangeName, apiKey, secretKey } = await request.json();
 
     if (!exchangeName || !apiKey || !secretKey) {
       return NextResponse.json(
         {
           error: "Missing required fields: exchangeName, apiKey, secretKey",
         },
+        { status: 400 },
+      );
+    }
+
+    // Validate credentials with the target exchange before persisting
+    const validation = await validateExchangeCredentials(exchangeName, apiKey, secretKey);
+    if (!validation.ok) {
+      return NextResponse.json(
+        { error: validation.error || "Invalid API credentials" },
         { status: 400 },
       );
     }
@@ -149,6 +159,7 @@ export async function POST(request: NextRequest) {
     const updatedData = {
       ...existingData,
       [exchangeName]: {
+        name: apiName,
         api_key: apiKey,
         secret_key: secretKey,
         created_at: new Date().toISOString(),

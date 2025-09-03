@@ -97,7 +97,7 @@ export default function ExchangeKeyModal({
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose} disabled={isOperating}>
+              <Button color="danger" variant="light" onPress={onClose} disabled={saving}>
                 Cancel
               </Button>
               <Button color="primary" onPress={onSave} isLoading={saving}>

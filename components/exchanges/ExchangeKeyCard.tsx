@@ -26,12 +26,15 @@ export default function ExchangeKeyCard({
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <h3 className="font-medium truncate">{item.exchange}</h3>
+            <div>
+              <h3 className="font-semibold text-base truncate">{item.name || item.exchange}</h3>
+              <p className="text-sm text-default-500 capitalize">{item.exchange}</p>
+            </div>
             <Chip size="sm" color={item.isActive ? "success" : "default"} variant="flat">
               {item.isActive ? "Active" : "Inactive"}
             </Chip>
           </div>
-          <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-default-600">
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-default-600">
             <span className="inline-flex items-center gap-1.5">
               <FiKey className="h-3 w-3" />
               <span className="uppercase tracking-wide text-[11px] text-default-500">API Key</span>
